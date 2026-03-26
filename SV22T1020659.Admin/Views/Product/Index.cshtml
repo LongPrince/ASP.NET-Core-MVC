@@ -1,6 +1,10 @@
-﻿@{
+@using SV22T1020659.Models.Catalog
+@model ProductSearchInput
+
+@{
     ViewBag.Title = "Quản lý Mặt hàng";
 }
+
 @section PageToolBar {
     <a href="~/Product/Create" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i>
@@ -10,50 +14,35 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <form id="formSearch">
-            <div class="row g-2">
-                <div class="col-md-3">
-                    <label class="form-label">Loại hàng</label>
-                    <select class="form-select">
-                        <option value="">-- Tất cả --</option>
-                        <option>Đồ uống</option>
-                        <option>Thực phẩm</option>
-                        <option>Gia dụng</option>
+        <form id="formSearch"
+              method="get"
+              action="~/Product/Search"
+              data-target="searchResult"
+              onsubmit="paginationSearch(event, this, 1)">
+
+            <input type="hidden" asp-for="PageSize" />
+
+            <div class="row">
+                <div class="col-sm-3 mb-2">
+                    <select class="form-select" asp-for="CategoryID"
+                            asp-items="await SelectListHelper.Categories()"
+                            onchange="paginationSearch(event, document.getElementById('formSearch'), 1)">
                     </select>
                 </div>
-
-                <div class="col-md-2">
-                    <label class="form-label">Nhà cung cấp</label>
-                    <select class="form-select">
-                        <option value="">-- Tất cả --</option>
-                        <option>Công ty ABC</option>
-                        <option>Công ty XYZ</option>
+                <div class="col-sm-3 mb-2">
+                    <select class="form-select" asp-for="SupplierID"
+                            asp-items="await SelectListHelper.Suppliers()"
+                            onchange="paginationSearch(event, document.getElementById('formSearch'), 1)">
                     </select>
                 </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Khoảng giá</label>
+                <div class="col-sm-6 mb-2">
                     <div class="input-group">
-                        <input type="text"
-                               name="minPrice" 
-                               class="form-control money-input"
-                               placeholder="Từ" />
-                        <span class="input-group-text">-</span>
-                        <input type="text"
-                               name="maxPrice"
-                               class="form-control money-input"
-                               placeholder="Đến" />
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Tên mặt hàng</label>
-                    <div class="input-group">
-                        <input type="text"
+                        <input type="text" asp-for="SearchValue"
                                class="form-control"
                                placeholder="Tên mặt hàng..." autofocus />
                         <button class="btn btn-info d-flex align-items-center">
                             <i class="bi bi-search me-1"></i>
+                            Tìm kiếm
                         </button>
                     </div>
                 </div>
@@ -62,68 +51,12 @@
     </div>
 </div>
 
-<div class="mb-2 text-muted">
-    Danh sách này có <strong>20</strong> mặt hàng
-</div>
+<div id="searchResult"></div>
 
-<div class="card">
-    <div class="card-body p-1">
-        <table class="table table-bordered table-hover mb-0 align-middle">
-            <thead class="table-secondary">
-                <tr>
-                    <th style="width:80px;">Ảnh</th>
-                    <th>Mặt hàng</th>
-                    <th style="width:120px;">Đơn vị</th>
-                    <th style="width:120px;">Giá</th>
-                    <th class="text-center" style="width:140px;">Trạng thái</th>
-                    <th class="text-center" style="width:100px;">Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 1; i <= 10; i++)
-                {
-                    <tr>
-                        <td class="text-center">
-                            <img src="~/images/products/demo.png"
-                                 class="img-thumbnail"
-                                 alt="Ảnh mặt hàng" />
-                        </td>
-                        <td>
-                            <strong>Nước suối Aquafina</strong><br />
-                            <small class="text-muted">
-                                Nước uống tinh khiết đóng chai 500ml
-                            </small>
-                        </td>
-                        <td>Chai</td>
-                        <td class="text-end">5,000</td>
-                        <td class="text-center">
-                            <span class="badge bg-success">Đang bán</span>
-                        </td>
-                        <td class="text-center text-nowrap">
-                            <a href="~/Product/Edit/123" class="btn btn-sm btn-primary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a href="~/Product/Delete/123" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="card-footer">
-        <ul class="pagination justify-content-center mb-0">
-            <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
-            </li>
-        </ul>
-    </div>
-</div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            paginationSearch(null, document.getElementById("formSearch"), @Model.Page);
+        });
+    </script>
+}

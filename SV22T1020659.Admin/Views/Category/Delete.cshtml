@@ -1,12 +1,17 @@
-﻿@{
+@using SV22T1020659.Models.Catalog
+@model Category
+@{
     ViewBag.Title = "Xóa loại hàng";
 }
 
 @section PageToolBar {
-    <button type="submit" form="formDelete" class="btn btn-danger">
-        <i class="bi bi-trash me-1"></i>
-        Xóa
-    </button>
+    @if (ViewBag.CanDelete == true)
+    {
+        <button type="submit" form="formDelete" class="btn btn-danger">
+            <i class="bi bi-trash me-1"></i>
+            Xác nhận xóa
+        </button>
+    }
     <a href="~/Category" class="btn btn-secondary ms-1">
         <i class="bi bi-arrow-left"></i>
         Quay lại
@@ -24,20 +29,28 @@
             </div>
 
             <div class="card-body">
-                <form id="formDelete" method="post">
-                    <div class="alert alert-warning d-flex align-items-center">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Bạn có chắc chắn muốn xóa loại hàng sau không?
-                    </div>
+                <form id="formDelete" method="post" action="~/Category/Delete/@Model.CategoryID">
+                    @if (ViewBag.CanDelete == true)
+                    {
+                        <div class="alert alert-warning">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Bạn có chắc chắn muốn xóa loại hàng sau không?
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-x-circle me-2"></i>
+                            Không thể xóa loại hàng này vì đang có dữ liệu liên quan.
+                        </div>
+                    }
 
                     <dl class="row mb-0">
-                        <dt class="col-sm-3">Tên loại hàng</dt>
-                        <dd class="col-sm-9">Đồ điện tử</dd>    
+                        <dt class="col-sm-4">Tên loại hàng</dt>
+                        <dd class="col-sm-8">@Model.CategoryName</dd>
 
-                        <dt class="col-sm-3">Mô tả</dt>
-                        <dd class="col-sm-9">
-                            Các sản phẩm điện tử như TV, máy tính, điện thoại
-                        </dd>
+                        <dt class="col-sm-4">Mô tả</dt>
+                        <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Description) ? "-" : Model.Description)</dd>
                     </dl>
                 </form>
             </div>
