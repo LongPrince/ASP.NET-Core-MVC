@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "Xóa nhân viên";
+}
+@section PageToolBar {
+    <button type="submit" form="formDelete" class="btn btn-danger">
+        <i class="bi bi-trash"></i> Xóa
+    </button>
+    <a href="/Employee" class="btn btn-secondary ms-1">
+        <i class="bi bi-arrow-left"></i> Quay lại
+    </a>
+}
+
+<div class="card card-danger">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="bi bi-person-x"></i> Xác nhận xóa nhân viên
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <form id="formDelete" method="post">
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle"></i>
+                Bạn có chắc chắn muốn xóa nhân viên này không?
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 text-start">
+                    <img src="~/images/employees/nophoto.png"
+                         class="img-thumbnail mb-2"
+                         style="width: 100%;"
+                         alt="Ảnh nhân viên" />
+                </div>
+
+                <div class="col-md-10">
+                    <dl class="row">
+                        <dt class="col-sm-3">Họ và tên:</dt>
+                        <dd class="col-sm-9">Nguyễn Văn A</dd>
+
+                        <dt class="col-sm-3">Ngày sinh:</dt>
+                        <dd class="col-sm-9">01/01/1990</dd>
+
+                        <dt class="col-sm-3">Điện thoại:</dt>
+                        <dd class="col-sm-9">0901234567</dd>
+
+                        <dt class="col-sm-3">Email:</dt>
+                        <dd class="col-sm-9">vana@example.com</dd>
+
+                        <dt class="col-sm-3">Địa chỉ:</dt>
+                        <dd class="col-sm-9">Huế</dd>
+
+                        <dt class="col-sm-3">Trạng thái:</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge bg-success">Đang làm việc</span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

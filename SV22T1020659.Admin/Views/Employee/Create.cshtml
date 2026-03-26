@@ -1,0 +1,115 @@
+﻿@model Employee
+@{
+}
+@section PageToolBar {
+    <button type="submit" form="formEdit" class="btn btn-primary">
+        <i class="bi bi-save"></i>
+        Lưu dữ liệu
+    </button>
+    <a href="~/Employee" class="btn btn-secondary ms-1">
+        <i class="bi bi-arrow-left"></i>
+        Quay lại
+    </a>
+}
+
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-person-badge me-2"></i>
+                    Thông tin nhân viên
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <!-- Đối với form có upload file, phải có enctype="multipart/form-data" -->
+                <form id="formEdit" method="post" enctype="multipart/form-data" action="~/Employee/SaveData">
+
+                    <input type="hidden" asp-for="EmployeeID" />
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Họ và tên</label>
+                        <div class="col-sm-5">
+                            <input type="text" asp-for="FullName"
+                                   class="form-control"
+                                   placeholder="" autofocus />
+                            <span class="text-danger" asp-validation-for="FullName"></span>
+                        </div>
+                        <label class="col-sm-2 col-form-label text-end">Ngày sinh</label>
+                        <div class="col-sm-2">
+                            <input type="text" asp-for="BirthDate"
+                                   class="form-control date-picker" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Địa chỉ</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" asp-for="Address"
+                                      rows="3"
+                                      placeholder=""></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Điện thoại</label>
+                        <div class="col-sm-2">
+                            <input type="tel" asp-for="Phone"
+                                   class="form-control"
+                                   placeholder="" />
+                        </div>
+                        <label class="col-sm-1 col-form-label text-end">Email</label>
+                        <div class="col-sm-6">
+                            <input type="email" asp-for="Email"
+                                   class="form-control"
+                                   placeholder="" />
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Ảnh</label>
+                        <div class="col-sm-9">
+                            <!-- Sử dụng hidden input để lưu giữ tên file ảnh hiện tại của nhân viên-->
+                            <input type="hidden" asp-for="Photo" />
+                            <!-- Sử dụng input có name="uploadPhoto" để upload ảnh (tránh không sử dụng name="Photo") -->
+                            <input type="file" name="uploadPhoto"
+                                   class="form-control"
+                                   accept="image/*"
+                                   data-img-preview="imgPreview"
+                                   onchange="previewImage(this)" />
+                            <div class="mt-2">
+                                <img id="imgPreview"
+                                     src="~/images/employees/@(string.IsNullOrEmpty(Model.Photo) ? "nophoto.png" : Model.Photo)"
+                                     class="img-thumbnail"
+                                     style="max-height: 150px;" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Trạng thái</label>
+                        <div class="col-sm-9">
+                            <div class="form-check form-switch mt-2">
+                                <input class="form-check-input" asp-for="IsWorking"
+                                       type="checkbox"
+                                       id="IsWorking" />
+                                <label class="form-check-label" for="IsWorking">
+                                    Đang làm việc
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-9 offset-3">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Thêm Shipper";
+}
+
+<div class="app-content-header">
+    <div class="container-fluid">
+        <h3>🚚 Thêm Shipper mới</h3>
+    </div>
+</div>
+
+<div class="app-content">
+    <div class="container-fluid">
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <form method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label">Tên Shipper</label>
+                        <input type="text" name="ShipperName"
+                               class="form-control"
+                               placeholder="Nhập tên shipper..." required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" name="Phone"
+                               class="form-control"
+                               placeholder="Nhập số điện thoại..." required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Trạng thái</label>
+                        <select class="form-select" name="Status">
+                            <option value="1">Hoạt động</option>
+                            <option value="0">Tạm nghỉ</option>
+                            <option value="-1">Bị khóa</option>
+                        </select>
+                    </div>
+
+                    <div class="text-end">
+                        <a asp-action="Index"
+                           class="btn btn-secondary me-2">
+                            Hủy
+                        </a>
+
+                        <button type="reset"
+                                class="btn btn-warning me-2">
+                            Reset
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            Xác nhận
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

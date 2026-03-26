@@ -1,0 +1,68 @@
+﻿@{
+    Layout = null;
+}
+<div class="modal-header">
+    <strong class="modal-title">
+        Cập nhật chi tiết đơn hàng
+    </strong>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+    <form class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row mb-3 align-items-center">
+                    <label class="col-sm-4 col-form-label fw-semibold">
+                        Mặt hàng
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text"
+                               class="form-control-plaintext fw-bold"
+                               value="Laptop HP Gaming VICTUS"
+                               readonly>
+                    </div>
+                </div>
+                <div class="row mb-3 align-items-center">
+                    <label class="col-sm-4 col-form-label fw-semibold">
+                        Số lượng
+                    </label>
+                    <div class="col-sm-5">
+                        <input type="number"
+                               class="form-control text-end"
+                               min="1"
+                               value="1">
+                    </div>
+                </div>
+                <div class="row mb-3 align-items-center">
+                    <label class="col-sm-4 col-form-label fw-semibold">
+                        Đơn giá
+                    </label>
+                    <div class="col-sm-5">
+                        <input type="text"
+                               class="form-control text-end money-input"
+                               value="23.990.000">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">                
+                <img src="/images/products/demo.png"
+                     alt="Tên mặt hàng"
+                     class="img-thumbnail"
+                     style="max-height:180px">
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary">
+        Cập nhật
+    </button>
+    <button type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal">
+        Đóng
+    </button>
+</div>

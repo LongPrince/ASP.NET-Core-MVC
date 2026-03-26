@@ -1,0 +1,104 @@
+﻿
+<!-- Header -->
+<div class="app-content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3 class="mb-0">Thêm nhà cung cấp</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="app-content">
+    <div class="container-fluid">
+
+        <div class="card">
+            <div class="card-body">
+
+                <form method="post"
+                      asp-controller="Supplier"
+                      asp-action="Create">
+
+                    <!-- Supplier Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Tên nhà cung cấp</label>
+                        <input type="text"
+                               name="SupplierName"
+                               class="form-control"
+                               placeholder="Nhập tên nhà cung cấp" />
+                    </div>
+
+                    <!-- Contact Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Tên giao dịch</label>
+                        <input type="text"
+                               name="ContactName"
+                               class="form-control"
+                               placeholder="Nhập tên giao dịch" />
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label class="form-label">Điện thoại</label>
+                        <input type="text"
+                               name="Phone"
+                               class="form-control"
+                               placeholder="Nhập số điện thoại" />
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email"
+                               name="Email"
+                               class="form-control"
+                               placeholder="example@email.com" />
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ</label>
+                        <input type="text"
+                               name="Address"
+                               class="form-control"
+                               placeholder="Nhập địa chỉ" />
+                    </div>
+
+                    <!-- Province -->
+                    <div class="mb-3">
+                        <label class="form-label">Tỉnh / Thành</label>
+                        <input type="text"
+                               name="Province"
+                               class="form-control"
+                               placeholder="Nhập tỉnh / thành phố" />
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="mt-4 d-flex gap-2">
+                        <!-- Create -->
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Tạo
+                        </button>
+
+                        <!-- Reset -->
+                        <button type="reset" class="btn btn-warning">
+                            <i class="bi bi-arrow-counterclockwise"></i> Xóa dữ liệu
+                        </button>
+
+                        <!-- Cancel -->
+                        <a asp-controller="Supplier"
+                           asp-action="Index"
+                           class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Hủy nhập
+                        </a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SV22T1020659.BusinessLayers\SV22T1020659.BusinessLayers.csproj" />
+    <ProjectReference Include="..\SV22T1020659.DataLayers\SV22T1020659.DataLayers.csproj" />
+    <ProjectReference Include="..\SV22T1020659.Models\SV22T1020659.Models.csproj" />
+  </ItemGroup>
+
+</Project>

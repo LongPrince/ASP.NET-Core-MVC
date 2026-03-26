@@ -1,0 +1,200 @@
+﻿@{
+    ViewBag.Title = "Lập đơn hàng";
+}
+
+<div class="row">
+    <!-- Tìm kiếm & chọn mặt hàng -->
+    <div class="col-4">
+        <div class="card card-outline card-primary h-100">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-search"></i>
+                    Lựa chọn hàng cần bán
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <!-- Search -->
+                <form method="get" class="mb-3">
+                    <div class="input-group">
+                        <input class="form-control"
+                               name="searchValue"
+                               placeholder="Nhập tên mặt hàng cần tìm" autofocus />
+                        <button class="btn btn-primary">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Danh sách mặt hàng -->
+                @for (int i = 1; i <= 3; i++)
+                {
+                    <form method="post" class="border rounded p-2 mb-2">
+                        <strong>Macbook Pro 15" M2 2023</strong>
+
+                        <div class="row mt-2">
+                            <div class="col-4">
+                                <img src="~/images/products/demo.png"
+                                     class="img-fluid border" style="max-height:100px" />
+                            </div>
+                            <div class="col-8">
+                                <div class="row g-2">
+                                    <div class="col-7">
+                                        <label class="form-label mb-0">Giá</label>
+                                        <input class="form-control form-control-sm money-input"
+                                               value="45000000" />
+                                    </div>
+                                    <div class="col-5">
+                                        <label class="form-label mb-0">SL</label>
+                                        <input type="number"
+                                               min="1"
+                                               value="1"
+                                               class="form-control form-control-sm" />
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-sm btn-primary mt-2 w-100">
+                                    <i class="bi bi-cart-plus"></i>
+                                    Thêm vào giỏ
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                }
+            </div>
+
+            <div class="card-footer">
+                <ul class="pagination justify-content-between mb-0">
+                    <li class="page-item">
+                        <a class="page-link">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Giỏ hàng và thông tin khách hàng -->
+    <div class="col-8">
+        <!-- Giỏ hàng -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-success">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-cart"></i>
+                            Danh sách mặt hàng đã chọn
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-success">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th style="width:auto">Tên hàng</th>
+                                    <th class="text-center" style="width:100px">ĐVT</th>
+                                    <th class="text-center" style="width:100px">SL</th>
+                                    <th class="text-end" style="width:150px">Giá</th>
+                                    <th class="text-end" style="width:150px">Thành tiền</th>
+                                    <th style="width:80px"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 1; i <= 3; i++)
+                                {
+                                    <tr>
+                                        <td class="text-center">@i</td>
+                                        <td>Laptop HP Gaming VICTUS</td>
+                                        <td class="text-center">Bộ</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-end">23.990.000</td>
+                                        <td class="text-end">23.990.000</td>
+                                        <td class="text-end text-nowrap">
+                                            <a class="btn btn-sm btn-primary open-modal" href="~/Order/EditCartItem?productId=456">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a class="btn btn-sm btn-danger open-modal" href="~/Order/DeleteCartItem?productId=456">
+                                                <i class="bi bi-dash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5" class="text-end">Tổng cộng:</th>
+                                    <th class="text-end">71,970,000</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="text-end">
+                            <a class="btn btn-sm btn-danger mt-2 open-modal"                               
+                               href="~/Order/ClearCart">
+                                <i class="bi bi-trash"></i>
+                                Xóa giỏ hàng
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Thông tin khách hàng và nơi giao hàng -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="card card-outline card-info">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-person"></i>
+                            Thông tin khách hàng & nơi giao hàng
+                        </h5>
+                    </div>
+
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Khách hàng</label>
+                                <div class="col-md-10">
+                                    <select class="form-select">
+                                        <option>-- Chọn khách hàng --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Tỉnh/thành</label>
+                                <div class="col-md-10">
+                                    <select class="form-select">
+                                        <option>-- Chọn Tỉnh/thành giao hàng --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Địa chỉ</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <button class="btn btn-primary">
+                                    <i class="bi bi-check-circle"></i>
+                                    Lập đơn hàng
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

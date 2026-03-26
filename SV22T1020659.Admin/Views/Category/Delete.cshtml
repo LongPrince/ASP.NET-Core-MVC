@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Xóa loại hàng";
+}
+
+@section PageToolBar {
+    <button type="submit" form="formDelete" class="btn btn-danger">
+        <i class="bi bi-trash me-1"></i>
+        Xóa
+    </button>
+    <a href="~/Category" class="btn btn-secondary ms-1">
+        <i class="bi bi-arrow-left"></i>
+        Quay lại
+    </a>
+}
+
+<div class="row justify-content-center">
+    <div class="col-12">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h5 class="card-title mb-0 text-danger">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Xác nhận xóa loại hàng
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <form id="formDelete" method="post">
+                    <div class="alert alert-warning d-flex align-items-center">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Bạn có chắc chắn muốn xóa loại hàng sau không?
+                    </div>
+
+                    <dl class="row mb-0">
+                        <dt class="col-sm-3">Tên loại hàng</dt>
+                        <dd class="col-sm-9">Đồ điện tử</dd>    
+
+                        <dt class="col-sm-3">Mô tả</dt>
+                        <dd class="col-sm-9">
+                            Các sản phẩm điện tử như TV, máy tính, điện thoại
+                        </dd>
+                    </dl>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
