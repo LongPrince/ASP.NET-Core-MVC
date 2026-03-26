@@ -1,53 +1,46 @@
-﻿@{
-    ViewBag.Title = "Quản lý Đơn hàng";
+@using SV22T1020659.Models.Sales
+@model OrderSearchInput
+
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
 }
-@section PageToolBar {
-    <a href="~/Order/Create" class="btn btn-primary">
-        <i class="bi bi-plus-circle me-1"></i>
-        Lập đơn hàng mới
-    </a>
-}
+
 <div class="card mb-3">
     <div class="card-body">
-        <form id="formSearch"
-              method="get"
-              action="~/Order/Search"
+        <form id="formSearch" 
+              method="get" 
+              action="~/Order/Search" 
               data-target="searchResult"
               onsubmit="paginationSearch(event, this, 1)">
 
-            <div class="row g-2">
-                <div class="col-md-3">
-                    <label class="form-label">Trạng thái đơn hàng</label>
-                    <select name="Status" class="form-select">
-                        <option value="">-- Tất cả --</option>
-                        <option>Đang chờ duyệt</option>
-                        <option>Đã duyệt</option>
-                        <option>Đang giao</option>
-                        <option>Hoàn tất</option>
-                        <option>Bị hủy</option>
-                        <option>Bị từ chối</option>
+            <input type="hidden" asp-for="PageSize" />
+
+            <div class="row align-items-end">
+                <div class="col-sm-2 mb-2">
+                    <label class="form-label">Trạng thái:</label>
+                    <select class="form-select" asp-for="Status" 
+                            asp-items="SelectListHelper.OrderStatus()"
+                            onchange="paginationSearch(event, document.getElementById('formSearch'), 1)">
                     </select>
                 </div>
 
-                <div class="col-md-4">
-                    <label class="form-label">Thời gian lập đơn hàng</label>
-                    <div class="input-group">
-                        <input type="text" name="dateFrom" class="form-control date-picker" placeholder="Từ ngày..." />
-                        <span class="input-group-text">-</span>
-                        <input type="text" name="dateTo" class="form-control date-picker" placeholder="...đến ngày" />
-                    </div>
+                <div class="col-sm-2 mb-2">
+                    <label class="form-label">Từ ngày:</label>
+                    <input type="text" asp-for="DateFrom" class="form-control date-picker" placeholder="dd/mm/yyyy" />
                 </div>
 
-                <div class="col-md-5">
-                    <label class="form-label">Tên khách hàng</label>
-                    <div class="input-group">
-                        <input type="text"
-                               name="searchValue"
-                               class="form-control"
-                               placeholder="Tên khách hàng..." autofocus />
+                <div class="col-sm-2 mb-2">
+                    <label class="form-label">Đến ngày:</label>
+                    <input type="text" asp-for="DateTo" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                </div>
 
-                        <button class="btn btn-info d-flex align-items-center">
+                <div class="col-sm-6 mb-2">
+                    <label class="form-label">Tìm theo tên khách hàng hoặc người giao hàng:</label>
+                    <div class="input-group">
+                        <input type="text" asp-for="SearchValue" class="form-control" placeholder="Tìm kiếm đơn hàng..." autofocus />
+                        <button type="submit" class="btn btn-info">
                             <i class="bi bi-search me-1"></i>
+                            Tìm kiếm
                         </button>
                     </div>
                 </div>
@@ -56,13 +49,12 @@
     </div>
 </div>
 
-<div id="searchResult">   
-</div>
+<div id="searchResult"></div>
 
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            paginationSearch(null, document.getElementById("formSearch"), 1);
+            paginationSearch(null, document.getElementById("formSearch"), @Model.Page);
         });
     </script>
 }

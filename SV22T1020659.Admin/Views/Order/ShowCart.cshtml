@@ -1,0 +1,176 @@
+@using SV22T1020659.Models.Sales
+@model List<CartItem>
+@{
+    Layout = null;
+    decimal totalAmount = 0;
+}
+
+<!-- Giỏ hàng -->
+<div class="row">
+    <div class="col-12">
+        <div class="card card-outline card-success">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-cart"></i>
+                    Danh sách mặt hàng đã chọn
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-success text-center">
+                        <tr>
+                            <th>#</th>
+                            <th style="width:auto">Tên hàng</th>
+                            <th style="width:100px">ĐVT</th>
+                            <th style="width:100px">SL</th>
+                            <th style="width:150px">Giá</th>
+                            <th style="width:150px">Thành tiền</th>
+                            <th style="width:80px"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int stt = 1;
+                            foreach (var item in Model)
+                            {
+                                totalAmount += item.TotalPrice;
+                                <tr>
+                                    <td class="text-center">@stt++</td>
+                                    <td>@item.ProductName</td>
+                                    <td class="text-center">@item.Unit</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-end">@item.SalePrice.ToString("N0")</td>
+                                    <td class="text-end font-weight-bold">@item.TotalPrice.ToString("N0")</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-danger ajax-cart-action"
+                                           href="~/Order/RemoveFromCart/@item.ProductID">
+                                            <i class="bi bi-dash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">Giỏ hàng trống</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="5" class="text-end">Tổng cộng:</th>
+                            <th class="text-end text-danger">@totalAmount.ToString("N0")</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="text-end">
+                    <a class="btn btn-sm btn-danger mt-2 ajax-cart-action" href="~/Order/ClearCart"
+                       onclick="return confirm('Xác nhận xóa giỏ hàng?')">
+                        <i class="bi bi-trash"></i>
+                        Xóa giỏ hàng
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thông tin khách hàng và nơi giao hàng -->
+<div class="row mt-3">
+    <div class="col-12">
+        <div class="card card-outline card-info">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-person"></i>
+                    Thông tin khách hàng & nơi giao hàng
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <form id="formOrderInit" action="~/Order/Init" method="post">
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Khách hàng</label>
+                        <div class="col-md-9">
+                            <select class="form-select select2" name="customerID" required>
+                                <option value="">-- Chọn khách hàng --</option>
+                                @foreach (var customer in await SelectListHelper.Customers())
+                                {
+                                    <option value="@customer.Value">@customer.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Tỉnh/thành giao hàng</label>
+                        <div class="col-md-9">
+                            <select class="form-select select2" name="deliveryProvince" required>
+                                <option value="">-- Chọn Tỉnh/thành --</option>
+                                @foreach (var province in await SelectListHelper.ProvincesAsync())
+                                {
+                                    <option value="@province.Value">@province.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-md-3 col-form-label">Địa chỉ giao hàng</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" name="deliveryAddress" rows="2" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary" id="btnInitOrder">
+                            <i class="bi bi-check-circle"></i>
+                            Lập đơn hàng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Xử lý sự kiện lập đơn hàng (Gửi bằng AJAX)
+    $(document).ready(function () {
+        $('#formOrderInit').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function (res) {
+                    if (isNaN(res)) {
+                        alert(res); // Hiển thị thông báo lỗi
+                    } else {
+                        // Res là orderID mới tạo thành công
+                        window.location.href = '/Order/Detail/' + res;
+                    }
+                }
+            });
+        });
+
+        // Tái tạo select2 nếu có
+        if (typeof $('.select2').select2 === 'function') {
+            $('.select2').select2();
+        }
+    });
+
+    // Lắng nghe các action xóa cartItem trả về view này
+    $('.ajax-cart-action').on('click', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $.get(url, function (html) {
+            $('#showCart').html(html);
+        });
+    });
+</script>

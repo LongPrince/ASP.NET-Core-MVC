@@ -1,4 +1,4 @@
-﻿namespace SV22T1020659.Models.Sales
+namespace SV22T1020659.Models.Sales
 {
     /// <summary>
     /// Đơn hàng
@@ -49,5 +49,25 @@
         /// Trạng thái hiện tại của đơn hàng
         /// </summary>
         public OrderStatusEnum Status { get; set; }
+
+        /// <summary>
+        /// Mô tả trạng thái đơn hàng (tiếng Việt)
+        /// </summary>
+        public string StatusDescription
+        {
+            get
+            {
+                return Status switch
+                {
+                    OrderStatusEnum.New => "Đơn hàng mới",
+                    OrderStatusEnum.Accepted => "Đơn hàng đã duyệt",
+                    OrderStatusEnum.Shipping => "Đang giao hàng",
+                    OrderStatusEnum.Completed => "Đơn hàng hoàn tất",
+                    OrderStatusEnum.Cancelled => "Đơn hàng đã hủy",
+                    OrderStatusEnum.Rejected => "Đơn hàng bị từ chối",
+                    _ => ""
+                };
+            }
+        }
     }
 }
