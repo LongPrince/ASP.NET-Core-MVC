@@ -10,11 +10,18 @@ using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    /// <summary>
+    /// Controller quản lý đơn hàng
+    /// </summary>
     public class OrderController : Controller
     {
         private const string Order_search = "OrderSearchInput";
         private const string SHOPPING_CART = "ShoppingCart";
 
+        /// <summary>
+        /// Trang chủ quản lý đơn hàng: Nhập thông tin tìm kiếm, phân trang và hiển thị đơn hàng
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             var input = ApplicationContext.GetSessionData<OrderSearchInput>(Order_search);
@@ -33,6 +40,11 @@ namespace SV22T1020659.Admin.Controllers
             return View(input);
         }
 
+        /// <summary>
+        /// Thực hiện tìm kiếm và phân trang đơn hàng bằng AJAX
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Search(OrderSearchInput input)
         {
             var result = await SalesDataService.ListOrdersAsync(input);
@@ -40,6 +52,11 @@ namespace SV22T1020659.Admin.Controllers
             return View(result);
         }
 
+        /// <summary>
+        /// Hiển thị thông tin chi tiết đơn hàng (các thông tin liên quan, danh sách mặt hàng đã mua)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Detail(int id)
         {
             var order = await SalesDataService.GetOrderAsync(id);
@@ -52,37 +69,69 @@ namespace SV22T1020659.Admin.Controllers
             return View(order);
         }
 
+        /// <summary>
+        /// Action thực hiện duyệt (chấp nhận) đơn hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Accept(int id)
         {
+            // Tạm thời gán EmployeeID = 1 cho đến khi có Authentication
             await SalesDataService.AcceptOrderAsync(id, 1);
             return RedirectToAction("Detail", new { id });
         }
 
+        /// <summary>
+        /// Action thực hiện từ chối đơn hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Reject(int id)
         {
             await SalesDataService.RejectOrderAsync(id, 1);
             return RedirectToAction("Detail", new { id });
         }
 
+        /// <summary>
+        /// Action thực hiện hủy bỏ đơn hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Cancel(int id)
         {
             await SalesDataService.CancelOrderAsync(id);
             return RedirectToAction("Detail", new { id });
         }
 
+        /// <summary>
+        /// Action thực hiện hoàn tất (kết thúc) đơn hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Finish(int id)
         {
             await SalesDataService.CompleteOrderAsync(id);
             return RedirectToAction("Detail", new { id });
         }
 
+        /// <summary>
+        /// Hiển thị giao diện để chọn người giao hàng (Shipper)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Shipping(int id)
+        public IActionResult Shipping(int id)
         {
             ViewBag.OrderID = id;
             return View();
         }
 
+        /// <summary>
+        /// Thực hiện lưu trữ thông tin người giao hàng và chuyển trạng thái đơn hàng sang Đang giao
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="shipperID"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Shipping(int id, int shipperID)
         {
@@ -90,14 +139,22 @@ namespace SV22T1020659.Admin.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
-        // --- Lập đơn hàng mới ---
-
+        /// <summary>
+        /// Giao diện hỗ trợ nghiệp vụ tạo một đơn hàng mới (Trang bán hàng)
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             var cart = GetCart();
             return View(cart);
         }
 
+        /// <summary>
+        /// Tìm kiếm mặt hàng theo tên và phân trang để lựa chọn đưa vào giỏ hàng
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
         public async Task<IActionResult> SearchProduct(string searchValue = "", int page = 1)
         {
             int pageSize = 5;
@@ -113,6 +170,11 @@ namespace SV22T1020659.Admin.Controllers
             return View(result);
         }
 
+        /// <summary>
+        /// Thêm một mặt hàng được chọn vào giỏ hàng
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public IActionResult AddToCart(CartItem item)
         {
             if (item.SalePrice <= 0 || item.Quantity <= 0)
@@ -133,6 +195,11 @@ namespace SV22T1020659.Admin.Controllers
             return RedirectToAction("ShowCart");
         }
 
+        /// <summary>
+        /// Xóa một mặt hàng khỏi giỏ hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult RemoveFromCart(int id)
         {
             var cart = GetCart();
@@ -144,18 +211,33 @@ namespace SV22T1020659.Admin.Controllers
             return RedirectToAction("ShowCart");
         }
 
+        /// <summary>
+        /// Làm trống toàn bộ giỏ hàng
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ClearCart()
         {
             ApplicationContext.SetSessionData(SHOPPING_CART, new List<CartItem>());
             return RedirectToAction("ShowCart");
         }
 
+        /// <summary>
+        /// Trả về partial hiển thị giỏ hàng hiện tại (Sử dụng cho AJAX)
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ShowCart()
         {
             var cart = GetCart();
             return View(cart);
         }
 
+        /// <summary>
+        /// Khởi tạo và lưu đơn hàng vào cơ sở dữ liệu dựa trên giỏ hàng và thông tin khách hàng
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <param name="deliveryProvince"></param>
+        /// <param name="deliveryAddress"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Init(int customerID, string deliveryProvince, string deliveryAddress)
         {
@@ -171,7 +253,7 @@ namespace SV22T1020659.Admin.Controllers
                 CustomerID = customerID,
                 DeliveryProvince = deliveryProvince,
                 DeliveryAddress = deliveryAddress,
-                EmployeeID = 1 // Tạm thời
+                EmployeeID = 1 // Gán tạm thời nhân viên login
             });
 
             if (orderID > 0)
@@ -193,6 +275,10 @@ namespace SV22T1020659.Admin.Controllers
             return Json("Không lập được đơn hàng");
         }
 
+        /// <summary>
+        /// Hàm nội bộ đọc dữ liệu giỏ hàng từ session
+        /// </summary>
+        /// <returns></returns>
         private List<CartItem> GetCart()
         {
             var cart = ApplicationContext.GetSessionData<List<CartItem>>(SHOPPING_CART);

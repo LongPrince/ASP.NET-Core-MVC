@@ -11,7 +11,7 @@ namespace SV22T1020659.Admin
     public static class SelectListHelper
     {
         /// <summary>
-        /// Tỉnh thành
+        /// Danh sách các tỉnh thành
         /// </summary>
         /// <returns></returns>
         public static async Task<List<SelectListItem>> ProvincesAsync()
@@ -33,7 +33,7 @@ namespace SV22T1020659.Admin
         }
 
         /// <summary>
-        /// Loại hàng
+        /// Danh sách loại hàng
         /// </summary>
         /// <returns></returns>
         public static async Task<List<SelectListItem>> Categories()
@@ -56,7 +56,7 @@ namespace SV22T1020659.Admin
         }
 
         /// <summary>
-        /// Nhà cung cấp
+        /// Danh sách nhà cung cấp
         /// </summary>
         /// <returns></returns>
         public static async Task<List<SelectListItem>> Suppliers()
@@ -78,6 +78,10 @@ namespace SV22T1020659.Admin
             return list;
         }
 
+        /// <summary>
+        /// Danh sách người giao hàng
+        /// </summary>
+        /// <returns></returns>
         public static async Task<List<SelectListItem>> Shippers()
         {
             var list = new List<SelectListItem>()
@@ -97,6 +101,10 @@ namespace SV22T1020659.Admin
             return list;
         }
 
+        /// <summary>
+        /// Danh sách khách hàng
+        /// </summary>
+        /// <returns></returns>
         public static async Task<List<SelectListItem>> Customers()
         {
             var list = new List<SelectListItem>()
