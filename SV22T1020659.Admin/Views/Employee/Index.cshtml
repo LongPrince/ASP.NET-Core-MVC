@@ -1,89 +1,46 @@
-﻿@{
+@using SV22T1020659.Models.Common
+@model PaginationSearchInput
+
+@{
     ViewBag.Title = "Quản lý Nhân viên";
 }
+
 @section PageToolBar {
     <a href="~/Employee/Create" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i>
         Bổ sung
     </a>
 }
+
 <div class="card mb-3">
     <div class="card-body">
-        <form id="formSearch">
+        <form id="formSearch"
+              method="get"
+              action="~/Employee/Search"
+              data-target="searchResult"
+              onsubmit="paginationSearch(event, this, 1)">
+
+            <input type="hidden" asp-for="PageSize" />
+
             <div class="input-group">
-                <input type="text"
+                <input type="text" asp-for="SearchValue"
                        class="form-control"
-                       placeholder="Tên nhân viên..." autofocus />
+                       placeholder="Nhập tên nhân viên..." autofocus />
                 <button class="btn btn-info d-flex align-items-center">
                     <i class="bi bi-search me-1"></i>
+                    Tìm kiếm
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<div class="mb-2 text-muted">
-    Danh sách này có <strong>15</strong> nhân viên
-</div>
+<div id="searchResult"></div>
 
-<div class="card">
-    <div class="card-body p-1">
-        <table class="table table-bordered table-hover mb-0">
-            <thead class="table-secondary">
-                <tr>
-                    <th>Họ tên</th>
-                    <th>Ngày sinh</th>
-                    <th>Điện thoại</th>
-                    <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th class="text-center" style="width:140px;">Trạng thái</th>
-                    <th class="text-center" style="width:100px;">Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 1; i <= 10; i++)
-                {
-                    <tr>
-                        <td>Nguyễn Văn A</td>
-                        <td>15/08/1990</td>
-                        <td>0912345678</td>
-                        <td>a.nguyen@gmail.com</td>
-                        <td>123 Lê Lợi</td>
-                        <td class="text-center">
-                            <span class="badge bg-success">Đang làm việc</span>
-                        </td>
-                        <td class="text-center text-nowrap">
-                            <a href="~/Employee/Edit/123" class="btn btn-sm btn-primary" title="Cập nhật">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a href="~/Employee/Delete/123" class="btn btn-sm btn-danger" title="Xóa">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                            <a href="~/Employee/ChangePassword/123" class="btn btn-sm btn-warning ms-2" title="Đổi mật khẩu">
-                                <i class="bi bi-key"></i>
-                            </a>
-                            <a href="~/Employee/ChangeRole/123" class="btn btn-sm btn-info" title="Cấp quyền">
-                                <i class="bi bi-shield-check"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="card-footer">
-        <ul class="pagination justify-content-center">
-            <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
-            </li>
-        </ul>
-    </div>
-</div>
-
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            paginationSearch(null, document.getElementById("formSearch"), @Model.Page);
+        });
+    </script>
+}

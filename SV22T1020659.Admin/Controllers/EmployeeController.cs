@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.BusinessLayers;
 using SV22T1020659.Models.Common;
@@ -11,9 +11,26 @@ namespace SV22T1020659.Admin.Controllers
 {
     public class EmployeeController : Controller
     {
+        private const string Employee_search = "EmployeeSearchInput";
+
         public IActionResult Index()
         {
-            return View();
+            var input = ApplicationContext.GetSessionData<PaginationSearchInput>(Employee_search);
+            if (input == null)
+                input = new PaginationSearchInput()
+                {
+                    Page = 1,
+                    PageSize = 10,
+                    SearchValue = ""
+                };
+            return View(input);
+        }
+
+        public async Task<IActionResult> Search(PaginationSearchInput input)
+        {
+            var result = await HRDataService.ListEmployeesAsync(input);
+            ApplicationContext.SetSessionData(Employee_search, input);
+            return View(result);
         }
 
         public IActionResult Create()
@@ -97,9 +114,19 @@ namespace SV22T1020659.Admin.Controllers
             }
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            if (Request.Method == "POST")
+            {
+                await HRDataService.DeleteEmployeeAsync(id);
+                return RedirectToAction("Index");
+            }
+            //GET 
+            var model = await HRDataService.GetEmployeeAsync(id);
+            if (model == null)
+                return RedirectToAction("Index");
+            ViewBag.CanDelete = !await HRDataService.IsUsedEmployeeAsync(id);
+            return View(model);
         }
 
         public IActionResult ChangePassword(int id)

@@ -1,13 +1,17 @@
-﻿@{
+@using SV22T1020659.Models.Partner
+@model Shipper
+@{
     ViewBag.Title = "Xóa người giao hàng";
 }
 
 @section PageToolBar {
-    <button type="submit" form="formDelete" class="btn btn-danger">
-        <i class="bi bi-trash me-1"></i>
-        Xóa
-    </button>
-
+    @if (ViewBag.CanDelete == true)
+    {
+        <button type="submit" form="formDelete" class="btn btn-danger">
+            <i class="bi bi-trash me-1"></i>
+            Xác nhận xóa
+        </button>
+    }
     <a href="~/Shipper" class="btn btn-secondary ms-1">
         <i class="bi bi-arrow-left"></i>
         Quay lại
@@ -25,21 +29,29 @@
             </div>
 
             <div class="card-body">
-                <form id="formDelete" method="post">
-
-                    <div class="alert alert-warning d-flex align-items-center">
-                        <i class="bi bi-info-circle me-2"></i>
-                        Bạn có chắc chắn muốn xóa người giao hàng sau không?
-                    </div>
+                <form id="formDelete" method="post" action="~/Shipper/Delete/@Model.ShipperID">
+                    @if (ViewBag.CanDelete == true)
+                    {
+                        <div class="alert alert-warning d-flex align-items-center">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Bạn có chắc chắn muốn xóa người giao hàng sau không?
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger d-flex align-items-center">
+                            <i class="bi bi-x-circle me-2"></i>
+                            Không thể xóa người giao hàng này vì đang có dữ liệu liên quan.
+                        </div>
+                    }
 
                     <dl class="row mb-0">
                         <dt class="col-sm-4">Tên người giao hàng</dt>
-                        <dd class="col-sm-8">Trần Văn B</dd>
+                        <dd class="col-sm-8">@Model.ShipperName</dd>
 
                         <dt class="col-sm-4">Điện thoại</dt>
-                        <dd class="col-sm-8">0912345678</dd>
+                        <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.Phone) ? "-" : Model.Phone)</dd>
                     </dl>
-
                 </form>
             </div>
         </div>

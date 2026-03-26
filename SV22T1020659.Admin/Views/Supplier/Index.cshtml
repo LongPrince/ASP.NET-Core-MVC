@@ -1,83 +1,46 @@
-﻿@{
+@using SV22T1020659.Models.Common
+@model PaginationSearchInput
+
+@{
     ViewBag.Title = "Quản lý Nhà cung cấp";
 }
+
 @section PageToolBar {
-    <a href="~/Supplier/Create" class="btn btn-primary d-flex align-items-center ms-1">
+    <a href="~/Supplier/Create" class="btn btn-primary">
         <i class="bi bi-plus-circle me-1"></i>
         Bổ sung
     </a>
 }
+
 <div class="card mb-3">
     <div class="card-body">
-        <form id="formSearch">
+        <form id="formSearch"
+              method="get"
+              action="~/Supplier/Search"
+              data-target="searchResult"
+              onsubmit="paginationSearch(event, this, 1)">
+
+            <input type="hidden" asp-for="PageSize" />
+
             <div class="input-group">
-                <input type="text"
+                <input type="text" asp-for="SearchValue"
                        class="form-control"
                        placeholder="Tên nhà cung cấp..." autofocus />
                 <button class="btn btn-info d-flex align-items-center">
                     <i class="bi bi-search me-1"></i>
+                    Tìm kiếm
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<div class="mb-2 text-muted">
-    Danh sách này có <strong>25</strong> nhà cung cấp
-</div>
+<div id="searchResult"></div>
 
-<div class="card">
-    <div class="card-body p-1">
-        <table class="table table-bordered table-hover mb-0">
-            <thead class="table-secondary">
-                <tr>
-                    <th>Tên nhà cung cấp</th>
-                    <th>Tên giao dịch</th>
-                    <th>Điện thoại</th>
-                    <th>Email</th>
-                    <th>Địa chỉ</th>
-                    <th>Tỉnh / Thành</th>
-                    <th class="text-center" style="width:120px;">Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                @for (int i = 1; i <= 10; i++)
-                {
-                    <tr>
-                        <td>Công ty ABC</td>
-                        <td>ABC Trading</td>
-                        <td>0901234567</td>
-                        <td>contact@abc.com</td>
-                        <td>123 Lê Lợi</td>
-                        <td>TP. Hồ Chí Minh</td>
-                        <td class="text-center">
-                            <a href="~/Supplier/Edit/123" class="btn btn-sm btn-primary me-1">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a href="~/Supplier/Delete/123" class="btn btn-sm btn-danger">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="card-footer">
-        <!-- Pagination -->
-        <ul class="pagination justify-content-center">
-            <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">3</a>
-            </li>
-        </ul>
-    </div>
-</div>
-
-
-
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            paginationSearch(null, document.getElementById("formSearch"), @Model.Page);
+        });
+    </script>
+}

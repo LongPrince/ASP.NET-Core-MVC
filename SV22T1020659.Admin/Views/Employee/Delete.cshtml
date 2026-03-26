@@ -1,57 +1,80 @@
-﻿@{
+@using SV22T1020659.Models.HR
+@model Employee
+@{
     ViewBag.Title = "Xóa nhân viên";
 }
+
 @section PageToolBar {
-    <button type="submit" form="formDelete" class="btn btn-danger">
-        <i class="bi bi-trash"></i> Xóa
-    </button>
-    <a href="/Employee" class="btn btn-secondary ms-1">
+    @if (ViewBag.CanDelete == true)
+    {
+        <button type="submit" form="formDelete" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Xác nhận xóa
+        </button>
+    }
+    <a href="~/Employee" class="btn btn-secondary ms-1">
         <i class="bi bi-arrow-left"></i> Quay lại
     </a>
 }
 
-<div class="card card-danger">
+<div class="card card-danger card-outline">
     <div class="card-header">
-        <h3 class="card-title">
-            <i class="bi bi-person-x"></i> Xác nhận xóa nhân viên
-        </h3>
+        <h5 class="card-title mb-0 text-danger">
+            <i class="bi bi-person-x me-2"></i> Xác nhận xóa nhân viên
+        </h5>
     </div>
 
     <div class="card-body">
-        <form id="formDelete" method="post">
-            <div class="alert alert-warning">
-                <i class="bi bi-exclamation-triangle"></i>
-                Bạn có chắc chắn muốn xóa nhân viên này không?
-            </div>
+        <form id="formDelete" method="post" action="~/Employee/Delete/@Model.EmployeeID">
+            @if (ViewBag.CanDelete == true)
+            {
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Bạn có chắc chắn muốn xóa nhân viên này không?
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Không thể xóa nhân viên này vì đang có dữ liệu liên quan (đơn hàng...).
+                </div>
+            }
 
             <div class="row">
-                <div class="col-md-2 text-start">
-                    <img src="~/images/employees/nophoto.png"
-                         class="img-thumbnail mb-2"
-                         style="width: 100%;"
+                <div class="col-md-2 text-center">
+                    <img src="~/images/employees/@(string.IsNullOrEmpty(Model.Photo) ? "nophoto.png" : Model.Photo)"
+                         class="img-thumbnail"
+                         style="width: 100%; max-width: 150px;"
                          alt="Ảnh nhân viên" />
                 </div>
 
                 <div class="col-md-10">
-                    <dl class="row">
+                    <dl class="row mb-0">
                         <dt class="col-sm-3">Họ và tên:</dt>
-                        <dd class="col-sm-9">Nguyễn Văn A</dd>
+                        <dd class="col-sm-9">@Model.FullName</dd>
 
                         <dt class="col-sm-3">Ngày sinh:</dt>
-                        <dd class="col-sm-9">01/01/1990</dd>
+                        <dd class="col-sm-9">@Model.BirthDate?.ToString("dd/MM/yyyy")</dd>
 
                         <dt class="col-sm-3">Điện thoại:</dt>
-                        <dd class="col-sm-9">0901234567</dd>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Phone) ? "-" : Model.Phone)</dd>
 
                         <dt class="col-sm-3">Email:</dt>
-                        <dd class="col-sm-9">vana@example.com</dd>
+                        <dd class="col-sm-9">@Model.Email</dd>
 
                         <dt class="col-sm-3">Địa chỉ:</dt>
-                        <dd class="col-sm-9">Huế</dd>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Address) ? "-" : Model.Address)</dd>
 
                         <dt class="col-sm-3">Trạng thái:</dt>
                         <dd class="col-sm-9">
-                            <span class="badge bg-success">Đang làm việc</span>
+                            @if (Model.IsWorking == true)
+                            {
+                                <span class="badge bg-success">Đang làm việc</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Đã nghỉ việc</span>
+                            }
                         </dd>
                     </dl>
                 </div>
