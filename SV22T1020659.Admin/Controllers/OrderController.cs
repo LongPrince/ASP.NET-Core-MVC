@@ -196,6 +196,18 @@ namespace SV22T1020659.Admin.Controllers
         }
 
         /// <summary>
+        /// Hiển thị giao diện xác nhận xóa một mặt hàng khỏi giỏ hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IActionResult DeleteCartItem(int id)
+        {
+            var cart = GetCart();
+            var item = cart.FirstOrDefault(m => m.ProductID == id);
+            return View(item);
+        }
+
+        /// <summary>
         /// Xóa một mặt hàng khỏi giỏ hàng
         /// </summary>
         /// <param name="id"></param>

@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -68,10 +68,11 @@
                     unformatOnSubmit: true
                 });
             });
-            document.querySelectorAll(".open-modal").forEach(element => {                
-                 element.addEventListener("click", function (e) {                    
-                    openModal(e, this);
-                });
+            document.addEventListener("click", function (e) {
+                const target = e.target.closest(".open-modal");
+                if (target) {
+                    openModal(e, target);
+                }
             });
         });
     </script>

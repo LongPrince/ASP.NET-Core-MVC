@@ -44,8 +44,8 @@
                                     <td class="text-end">@item.SalePrice.ToString("N0")</td>
                                     <td class="text-end font-weight-bold">@item.TotalPrice.ToString("N0")</td>
                                     <td class="text-center">
-                                        <a class="btn btn-sm btn-danger ajax-cart-action"
-                                           href="~/Order/RemoveFromCart/@item.ProductID">
+                                        <a class="btn btn-sm btn-danger open-modal"
+                                           href="~/Order/DeleteCartItem/@item.ProductID">
                                             <i class="bi bi-dash"></i>
                                         </a>
                                     </td>
