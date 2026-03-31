@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SV22T1020659.Models.Common;
-using SV22T1020659.Models.Catalog;
 using SV22T1020659.BusinessLayers;
+using SV22T1020659.Models.Catalog;
+using SV22T1020659.Models.Common;
 using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private const string Category_search = "CategorySearchInput";

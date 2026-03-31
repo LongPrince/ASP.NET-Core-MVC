@@ -1,14 +1,16 @@
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using SV22T1020659.Models.Common;
-using SV22T1020659.Models.Catalog;
+using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.BusinessLayers;
+using SV22T1020659.Models.Catalog;
+using SV22T1020659.Models.Common;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private const string Product_search = "ProductSearchInput";

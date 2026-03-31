@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.BusinessLayers;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private const string Employee_search = "EmployeeSearchInput";

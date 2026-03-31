@@ -25,6 +25,9 @@
                 <p class="login-box-msg">Đăng nhập</p>
 
                 <form action="~/Account/Login" method="post">
+                    <div class = "text-danger mb-2  ">
+                        @Html.ValidationSummary()
+                    </div>
 
                     <div class="input-group mb-3">
                         <input  name=" username" value="@ViewBag.UserName"
@@ -38,7 +41,7 @@
                         <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
                     </div>
                     <div> 
-                        @Html.ValidationMessage("LoginError", "", new { @class = "text-danger" })
+                        @Html.ValidationMessage("LoginError",new { @class = "text-danger" })
                     </div>
                     <!--begin::Row-->
                     <div class="row">                        

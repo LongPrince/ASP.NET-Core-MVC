@@ -1,29 +1,33 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.Models.Security;
 using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         /// <summary>
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string username, string password)
         {
             ViewBag.Username = username;
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                ModelState.AddModelError("", "Vui lòng nhập tên đăng nhập và mật khẩu");
+                ModelState.AddModelError("Error","Vui lòng nhập tên đăng nhập và mật khẩu");
                 return View();
             }
             string hashedPassword = CryptHelper.HashMD5(password);

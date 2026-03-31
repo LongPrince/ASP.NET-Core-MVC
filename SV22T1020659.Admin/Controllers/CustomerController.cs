@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.Models.Common;
 using SV22T1020659.Models.Partner;
 using System.Reflection;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {/// <summary>
      /// Lưu điều kiện tìm kiếm khách hàng trong session

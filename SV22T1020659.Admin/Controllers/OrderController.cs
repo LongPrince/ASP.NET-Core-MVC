@@ -1,8 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SV22T1020659.BusinessLayers;
+using SV22T1020659.Models.Catalog;
 using SV22T1020659.Models.Common;
 using SV22T1020659.Models.Sales;
-using SV22T1020659.Models.Catalog;
-using SV22T1020659.BusinessLayers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
+    [Authorize]
+    
     /// <summary>
     /// Controller quản lý đơn hàng
     /// </summary>
