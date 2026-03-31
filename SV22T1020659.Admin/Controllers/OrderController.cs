@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SV22T1020659.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = $"{WebUserRoles.Sales}")]
     
     /// <summary>
     /// Controller quản lý đơn hàng
