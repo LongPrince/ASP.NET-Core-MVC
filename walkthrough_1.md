@@ -26,6 +26,3 @@
 > Project Shop đang chạy một cách mượt mà và độc lập tại Port `5150`. Hiện tại anh đã có thể đăng nhập thử, chỉnh sửa profile và đổi password thông qua tài khoản khách hàng mới tạo.
 - Cấu hình tự binding với CSDL `LiteCommerceDB` hoàn chỉnh trong mục config.
 - Việc đăng xuất khỏi Shop cũng hoàn toàn **không** làm mất session của tài khoản Admin ở Port `5175`.
-
----
-Nếu anh thấy hài lòng với giao diện Shop và các luồng xử lý trên, anh có thể báo cho em để lên luồng kế hoạch cho **giai đoạn tiếp theo (Tạo giao diện hiển thị Danh mục sản phẩm, tính năng Tìm kiếm, Chi tiết mặt hàng + Filter)**.
