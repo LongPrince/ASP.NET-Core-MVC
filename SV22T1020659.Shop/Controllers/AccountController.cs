@@ -57,8 +57,9 @@ namespace SV22T1020659.Shop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
             return View();
         }
 
@@ -68,6 +69,7 @@ namespace SV22T1020659.Shop.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
                 return View(model);
             }
 
@@ -76,11 +78,9 @@ namespace SV22T1020659.Shop.Controllers
             if (inUseEmail)
             {
                 ModelState.AddModelError("Email", "Địa chỉ email này đã được sử dụng.");
+                ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
                 return View(model);
             }
-
-            var provinces = await DictionaryDataService.ListProvincesAsync();
-            var defaultProvince = provinces.FirstOrDefault()?.ProvinceName ?? "";
 
             // Create new Customer
             var customer = new Customer
@@ -88,10 +88,10 @@ namespace SV22T1020659.Shop.Controllers
                 CustomerName = model.CustomerName,
                 Email = model.Email,
                 Phone = model.Phone,
-                Password = model.Password,
+                Password = model.Password, // Lưu ý: Cần mã hóa mật khẩu ở đây
                 ContactName = model.CustomerName, // default contact name
-                Province = defaultProvince,
-                Address = "",
+                Province = model.Province,
+                Address = model.Address ?? "",
                 IsLocked = false
             };
 

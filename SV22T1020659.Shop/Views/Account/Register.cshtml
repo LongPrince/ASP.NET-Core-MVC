@@ -37,6 +37,27 @@
                     <span asp-validation-for="Password" class="text-danger small d-block mt-1"></span>
                 </div>
 
+                <div class="mb-3">
+                    <label asp-for="Province" class="form-label fw-semibold"></label>
+                    <select asp-for="Province" class="form-select">
+                        <option value="">-- Chọn Tỉnh/Thành --</option>
+                        @if (ViewBag.Provinces != null)
+                        {
+                            foreach (var item in ViewBag.Provinces)
+                            {
+                                <option value="@item.ProvinceName">@item.ProvinceName</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="Province" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label fw-semibold"></label>
+                    <input asp-for="Address" class="form-control" placeholder="Số nhà, đường..." />
+                    <span asp-validation-for="Address" class="text-danger small d-block mt-1"></span>
+                </div>
+
                 <div class="mb-4">
                     <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
                     <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••" />

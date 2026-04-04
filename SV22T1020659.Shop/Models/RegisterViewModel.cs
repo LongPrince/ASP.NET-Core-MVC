@@ -22,6 +22,13 @@ namespace SV22T1020659.Shop.Models
         [Display(Name = "Mật khẩu")]
         public string Password { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "Vui lòng chọn tỉnh/thành")]
+        [Display(Name = "Tỉnh/Thành")]
+        public string Province { get; set; } = string.Empty;
+
+        [Display(Name = "Địa chỉ")]
+        public string Address { get; set; } = string.Empty;
+
         [DataType(DataType.Password)]
         [Display(Name = "Xác nhận mật khẩu")]
         [Compare("Password", ErrorMessage = "Mật khẩu xác nhận không khớp.")]
