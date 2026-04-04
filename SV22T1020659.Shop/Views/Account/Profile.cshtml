@@ -31,6 +31,11 @@
                             <i class="fa-solid fa-box-open me-2"></i> Lịch sử mua hàng
                         </a>
                     </li>
+                    <li class="nav-item mt-2 border-top pt-2">
+                        <a class="nav-link text-danger" asp-controller="Account" asp-action="Logout">
+                            <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -75,7 +80,16 @@
                         </div>
                         <div class="col-sm-6 mb-3">
                             <label asp-for="Province" class="form-label fw-semibold"></label>
-                            <input asp-for="Province" class="form-control" />
+                            <select asp-for="Province" class="form-select">
+                                <option value="">-- Chọn Tỉnh/Thành --</option>
+                                @if (ViewBag.Provinces != null)
+                                {
+                                    foreach (var item in ViewBag.Provinces)
+                                    {
+                                        <option value="@item.ProvinceName" selected="@(item.ProvinceName == Model.Province)">@item.ProvinceName</option>
+                                    }
+                                }
+                            </select>
                             <span asp-validation-for="Province" class="text-danger small"></span>
                         </div>
                     </div>

@@ -38,6 +38,12 @@
                 </div>
 
                 <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small d-block mt-1"></span>
+                </div>
+
+                <div class="mb-3">
                     <label asp-for="Province" class="form-label fw-semibold"></label>
                     <select asp-for="Province" class="form-select">
                         <option value="">-- Chọn Tỉnh/Thành --</option>
@@ -52,16 +58,10 @@
                     <span asp-validation-for="Province" class="text-danger small d-block mt-1"></span>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-4">
                     <label asp-for="Address" class="form-label fw-semibold"></label>
                     <input asp-for="Address" class="form-control" placeholder="Số nhà, đường..." />
                     <span asp-validation-for="Address" class="text-danger small d-block mt-1"></span>
-                </div>
-
-                <div class="mb-4">
-                    <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
-                    <input asp-for="ConfirmPassword" class="form-control" placeholder="••••••••" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger small d-block mt-1"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Đăng ký ngay</button>

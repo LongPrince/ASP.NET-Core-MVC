@@ -1,3 +1,7 @@
+---
+description: 
+---
+
 # Báo cáo hoàn thành: Giai đoạn 1 Shop App (Đăng ký, Đăng nhập, Hồ sơ)
 
 ## 🎯 Mục tiêu hoàn thành
@@ -11,18 +15,17 @@
 - Cài đặt `_Layout.cshtml` mới sử dụng **Bootstrap 5** thay cho cấu trúc AdminLTE, tạo luồng gió mới, thanh thoát, phù hợp với trải nghiệm mua sắm E-commerce.
 - Cấu hình file `wwwroot/css/styles.css` cung cấp các Utility Class, Box Shadow hiện đại, bo góc mềm mại.
 
-**Bảo mật & Database (Backend)**
+**Bảo mật & Cấu trúc (Backend)**
 - Cấu hình độc lập Session và Cookie Authentication (với scope `SV22T1020659.CustomerCookie`), đảm bảo sự cách ly phiên với project Admin.
-- Vá lỗi tham chiếu cho SQL Dapper: Đã khai báo thuộc tính `Password` vào model base `Customer` (`SV22T1020659.Models.Partner.Customer`) để khớp câu lệnh `INSERT` của `CustomerRepository.cs` (bước này đã giải quyết một lỗi nghẽn rất nghiêm trọng khiến Dapper không thực thi được).
+- **Mã hóa MD5:** Triển khai cơ chế bảo mật mật khẩu bằng thuật toán MD5 đồng bộ với hệ thống Admin.
+- **Tổ chức AppCodes:** Tạo thư mục `AppCodes` trong project Shop và lớp `CryptHelper.cs` để xử lý các hàm tiện ích mã hóa dùng chung.
+- Vá lỗi tham chiếu cho SQL Dapper: Đã khai báo thuộc tính `Password` vào model base `Customer` (`SV22T1020659.Models.Partner.Customer`) để khớp câu lệnh `INSERT` của `CustomerRepository.cs`.
 
-**Controllers & Views (Tính năng)**
-- `AccountController.cs` với 4 Endpoints cốt lõi: `Login`, `Register`, `Profile`, `ChangePassword`, `Logout`.
-- Kiểm duyệt đầu vào (Data Validation) bằng logic ViewModels (`RegisterViewModel`, `LoginViewModel`, `ProfileViewModel`, `ChangePasswordViewModel`). Đảm bảo bắt lỗi các trường bắt buộc, email trùng lắp qua `PartnerDataService.ValidatelCustomerEmailAsync`.
-- Tự động Claims phân quyền role `"Customer"` và auto sign-in sau khi Đăng ký thành công.
-- 4 View tương ứng (`Register.cshtml`, `Login.cshtml`, `Profile.cshtml`, `ChangePassword.cshtml`) được thiết kế thẩm mỹ cao, dạng Card-Auth hiện đại (không xài AdminLTE).
+**Controllers & Views (Tính năng tối ưu)**
+- `AccountController.cs` với logic `AuthenticateAsync` và `ChangePasswordAsync` đã được cập nhật để so sánh mật khẩu mã hóa MD5.
+- **Form Đăng ký tối ưu:** Điều chỉnh thứ tự ô nhập (Mật khẩu và Xác nhận mật khẩu nằm cạnh nhau). Tích hợp chọn **Tỉnh/Thành** qua Dropdown (Select) và ô nhập **Địa chỉ** để khớp Backend.
+- **Trang Profile thông minh:** Chuyển ô nhập Province sang Dropdown Select, tự động nạp dữ liệu từ `DictionaryDataService` giúp người dùng chọn nhanh thay vì nhập tay.
+- **Tiện ích Đăng xuất:** Bổ sung nút Đăng xuất trực quan tại Sidebar của trang cá nhân (Profile) và trang Đổi mật khẩu.
+- 4 View tương ứng (`Register.cshtml`, `Login.cshtml`, `Profile.cshtml`, `ChangePassword.cshtml`) được thiết kế thẩm mỹ cao, dạng Card-Auth hiện đại.
 
-## 🧪 Kết quả Validation
-> [!NOTE]
-> Project Shop đang chạy một cách mượt mà và độc lập tại Port `5150`. Hiện tại anh đã có thể đăng nhập thử, chỉnh sửa profile và đổi password thông qua tài khoản khách hàng mới tạo.
-- Cấu hình tự binding với CSDL `LiteCommerceDB` hoàn chỉnh trong mục config.
-- Việc đăng xuất khỏi Shop cũng hoàn toàn **không** làm mất session của tài khoản Admin ở Port `5175`.
+.

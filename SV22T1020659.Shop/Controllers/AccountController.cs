@@ -1,10 +1,10 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.BusinessLayers;
 using SV22T1020659.Models.Partner;
 using SV22T1020659.Shop.Models;
-using System.Security.Claims;
 
 namespace SV22T1020659.Shop.Controllers
 {
@@ -25,7 +25,8 @@ namespace SV22T1020659.Shop.Controllers
                 return View(model);
             }
 
-            var userAccount = await UserAccountService.AuthenticateAsync(model.Email, model.Password, isEmployee: false);
+            var passwordHash = CryptHelper.HashMD5(model.Password);
+            var userAccount = await UserAccountService.AuthenticateAsync(model.Email, passwordHash, isEmployee: false);
             if (userAccount == null)
             {
                 ModelState.AddModelError(string.Empty, "Đăng nhập thất bại. Vui lòng kiểm tra lại Email và Mật khẩu.");
@@ -88,7 +89,7 @@ namespace SV22T1020659.Shop.Controllers
                 CustomerName = model.CustomerName,
                 Email = model.Email,
                 Phone = model.Phone,
-                Password = model.Password, // Lưu ý: Cần mã hóa mật khẩu ở đây
+                Password = CryptHelper.HashMD5(model.Password),
                 ContactName = model.CustomerName, // default contact name
                 Province = model.Province,
                 Address = model.Address ?? "",
@@ -147,6 +148,7 @@ namespace SV22T1020659.Shop.Controllers
                         Province = customer.Province ?? "",
                         ContactName = customer.ContactName
                     };
+                    ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
                     return View(model);
                 }
             }
@@ -160,6 +162,7 @@ namespace SV22T1020659.Shop.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
                 return View(model);
             }
 
@@ -179,12 +182,15 @@ namespace SV22T1020659.Shop.Controllers
                     if (success)
                     {
                         ViewBag.SuccessMessage = "Cập nhật thông tin thành công!";
+                        ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
                         return View(model);
                     }
                 }
             }
-            
+
+
             ModelState.AddModelError(string.Empty, "Cập nhật không thành công.");
+            ViewBag.Provinces = await DictionaryDataService.ListProvincesAsync();
             return View(model);
         }
 
@@ -209,7 +215,8 @@ namespace SV22T1020659.Shop.Controllers
             if (!string.IsNullOrEmpty(email))
             {
                 // Authenticate to check old password
-                var userAccount = await UserAccountService.AuthenticateAsync(email, model.OldPassword, isEmployee: false);
+                var oldPasswordHash = CryptHelper.HashMD5(model.OldPassword);
+                var userAccount = await UserAccountService.AuthenticateAsync(email, oldPasswordHash, isEmployee: false);
                 if (userAccount == null)
                 {
                     ModelState.AddModelError("OldPassword", "Mật khẩu hiện tại không đúng.");
@@ -217,7 +224,8 @@ namespace SV22T1020659.Shop.Controllers
                 }
 
                 // Change password
-                bool success = await UserAccountService.ChangePasswordAsync(email, model.NewPassword, isEmployee: false);
+                var newPasswordHash = CryptHelper.HashMD5(model.NewPassword);
+                bool success = await UserAccountService.ChangePasswordAsync(email, newPasswordHash, isEmployee: false);
                 if (success)
                 {
                     ViewBag.SuccessMessage = "Đổi mật khẩu thành công!";
