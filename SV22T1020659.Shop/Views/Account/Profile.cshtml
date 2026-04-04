@@ -1,0 +1,100 @@
+@model SV22T1020659.Shop.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+
+<div class="row pt-4">
+    <div class="col-md-3">
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body p-4 text-center">
+                <i class="fa-solid fa-circle-user text-muted" style="font-size: 80px;"></i>
+                <h5 class="my-3">@User.Identity?.Name</h5>
+                <p class="text-muted mb-1">Mã KH: #@Model.CustomerID</p>
+                <div class="d-flex justify-content-center mb-2"></div>
+            </div>
+        </div>
+        <div class="card mb-4 mb-lg-0 border-0 shadow-sm">
+            <div class="card-body p-0">
+                <ul class="nav flex-column profile-sidebar p-2">
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-action="Profile">
+                            <i class="fa-regular fa-id-badge me-2"></i> Thông tin cá nhân
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-body" asp-action="ChangePassword">
+                            <i class="fa-solid fa-key me-2"></i> Đổi mật khẩu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-body" href="#">
+                            <i class="fa-solid fa-box-open me-2"></i> Lịch sử mua hàng
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 text-primary fw-bold"><i class="fa-solid fa-pen-to-square me-2"></i>Cập nhật thông tin</h5>
+            </div>
+            <div class="card-body p-4">
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-check-circle me-2"></i> @ViewBag.SuccessMessage
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Profile" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                    <input type="hidden" asp-for="CustomerID" />
+
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <label asp-for="CustomerName" class="form-label fw-semibold"></label>
+                            <input asp-for="CustomerName" class="form-control" />
+                            <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label asp-for="ContactName" class="form-label fw-semibold"></label>
+                            <input asp-for="ContactName" class="form-control" />
+                            <span asp-validation-for="ContactName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <label asp-for="Phone" class="form-label fw-semibold"></label>
+                            <input asp-for="Phone" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label asp-for="Province" class="form-label fw-semibold"></label>
+                            <input asp-for="Province" class="form-control" />
+                            <span asp-validation-for="Province" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Address" class="form-label fw-semibold"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary px-4">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
