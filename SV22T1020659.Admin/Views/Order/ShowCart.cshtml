@@ -20,7 +20,7 @@
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="table-success text-center">
                         <tr>
-                            <th>#</th>
+                            <th>STT</th>
                             <th style="width:auto">Tên hàng</th>
                             <th style="width:100px">ĐVT</th>
                             <th style="width:100px">SL</th>
@@ -37,7 +37,7 @@
                             {
                                 totalAmount += item.TotalPrice;
                                 <tr>
-                                    <td class="text-center">@stt++</td>
+                                    <td class="text-center">@(stt++)</td>
                                     <td>@item.ProductName</td>
                                     <td class="text-center">@item.Unit</td>
                                     <td class="text-center">@item.Quantity</td>
@@ -45,8 +45,8 @@
                                     <td class="text-end font-weight-bold">@item.TotalPrice.ToString("N0")</td>
                                     <td class="text-center">
                                         <a class="btn btn-sm btn-danger open-modal"
-                                           href="~/Order/DeleteCartItem/@item.ProductID">
-                                            <i class="bi bi-dash"></i>
+                                           href="~/Order/DeleteCartItem/@item.ProductID" title="Xóa mặt hàng">
+                                            <i class="bi bi-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -139,38 +139,10 @@
 </div>
 
 <script>
-    // Xử lý sự kiện lập đơn hàng (Gửi bằng AJAX)
     $(document).ready(function () {
-        $('#formOrderInit').on('submit', function (e) {
-            e.preventDefault();
-            var form = $(this);
-            $.ajax({
-                url: form.attr('action'),
-                type: form.attr('method'),
-                data: form.serialize(),
-                success: function (res) {
-                    if (isNaN(res)) {
-                        alert(res); // Hiển thị thông báo lỗi
-                    } else {
-                        // Res là orderID mới tạo thành công
-                        window.location.href = '/Order/Detail/' + res;
-                    }
-                }
-            });
-        });
-
         // Tái tạo select2 nếu có
         if (typeof $('.select2').select2 === 'function') {
             $('.select2').select2();
         }
-    });
-
-    // Lắng nghe các action xóa cartItem trả về view này
-    $('.ajax-cart-action').on('click', function (e) {
-        e.preventDefault();
-        var url = $(this).attr('href');
-        $.get(url, function (html) {
-            $('#showCart').html(html);
-        });
     });
 </script>

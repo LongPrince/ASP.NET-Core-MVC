@@ -1,18 +1,20 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.BusinessLayers;
 using SV22T1020659.Models.Catalog;
 using SV22T1020659.Models.Common;
 using SV22T1020659.Models.Sales;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SV22T1020659.Admin;
 
 namespace SV22T1020659.Admin.Controllers
 {
-    [Authorize(Roles = $"{WebUserRoles.Sales}")]
-    
+    [Authorize(Roles = $"{WebUserRoles.Sales},{WebUserRoles.Administrator}")]
+
+
     /// <summary>
     /// Controller quản lý đơn hàng
     /// </summary>
@@ -79,8 +81,8 @@ namespace SV22T1020659.Admin.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Accept(int id)
         {
-            // Tạm thời gán EmployeeID = 1 cho đến khi có Authentication
-            await SalesDataService.AcceptOrderAsync(id, 1);
+            var userData = User.GetUserData();
+            await SalesDataService.AcceptOrderAsync(id, int.Parse(userData.UserId));
             return RedirectToAction("Detail", new { id });
         }
 
@@ -91,7 +93,8 @@ namespace SV22T1020659.Admin.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Reject(int id)
         {
-            await SalesDataService.RejectOrderAsync(id, 1);
+            var userData = User.GetUserData();
+            await SalesDataService.RejectOrderAsync(id, int.Parse(userData.UserId));
             return RedirectToAction("Detail", new { id });
         }
 
@@ -199,6 +202,32 @@ namespace SV22T1020659.Admin.Controllers
         }
 
         /// <summary>
+        /// Thêm một mặt hàng vào giỏ hàng (API trả về JSON)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AddCartItem(CartItem item)
+        {
+            if (item.SalePrice <= 0 || item.Quantity <= 0)
+                return Json(new { code = 0, message = "Giá bán và số lượng không hợp lệ" });
+
+            var cart = GetCart();
+            var existingItem = cart.FirstOrDefault(m => m.ProductID == item.ProductID);
+            if (existingItem == null)
+            {
+                cart.Add(item);
+            }
+            else
+            {
+                existingItem.Quantity += item.Quantity;
+                existingItem.SalePrice = item.SalePrice;
+            }
+            ApplicationContext.SetSessionData(SHOPPING_CART, cart);
+            return Json(new { code = 1, message = "Thêm vào giỏ hàng thành công" });
+        }
+
+        /// <summary>
         /// Hiển thị giao diện xác nhận xóa một mặt hàng khỏi giỏ hàng
         /// </summary>
         /// <param name="id"></param>
@@ -224,6 +253,48 @@ namespace SV22T1020659.Admin.Controllers
 
             ApplicationContext.SetSessionData(SHOPPING_CART, cart);
             return RedirectToAction("ShowCart");
+        }
+
+        /// <summary>
+        /// Xóa một mặt hàng khỏi giỏ hàng (API trả về JSON)
+        /// </summary>
+        /// <param name="productID"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ActionName("DeleteCartItem")]
+        public IActionResult DeleteCartItem_Post(int product)
+        {
+            var cart = GetCart();
+            var item = cart.FirstOrDefault(m => m.ProductID == product);
+            if (item != null)
+            {
+                cart.Remove(item);
+                ApplicationContext.SetSessionData(SHOPPING_CART, cart);
+            }
+            return Json(new { code = 1, message = "Xóa mặt hàng thành công" });
+        }
+
+        /// <summary>
+        /// Cập nhật thông tin mặt hàng trong giỏ hàng (API trả về JSON)
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult UpdateCartItem(CartItem item)
+        {
+            if (item.Quantity <= 0)
+                return Json(new { code = 0, message = "Số lượng không hợp lệ" });
+
+            var cart = GetCart();
+            var existingItem = cart.FirstOrDefault(m => m.ProductID == item.ProductID);
+            if (existingItem != null)
+            {
+                existingItem.Quantity = item.Quantity;
+                existingItem.SalePrice = item.SalePrice;
+                ApplicationContext.SetSessionData(SHOPPING_CART, cart);
+                return Json(new { code = 1, message = "Cập nhật thành công" });
+            }
+            return Json(new { code = 0, message = "Mặt hàng không tồn tại trong giỏ hàng" });
         }
 
         /// <summary>
@@ -268,7 +339,7 @@ namespace SV22T1020659.Admin.Controllers
                 CustomerID = customerID,
                 DeliveryProvince = deliveryProvince,
                 DeliveryAddress = deliveryAddress,
-                EmployeeID = 1 // Gán tạm thời nhân viên login
+                EmployeeID = int.Parse(User.GetUserData().UserId)
             });
 
             if (orderID > 0)

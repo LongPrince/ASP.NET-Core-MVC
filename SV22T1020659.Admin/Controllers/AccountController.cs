@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.Models.Security;
 using SV22T1020659.Admin;
 using SV22T1020659.Models.Security;
+using SV22T1020659.BusinessLayers;
 
 namespace SV22T1020659.Admin.Controllers
 {
@@ -35,27 +36,15 @@ namespace SV22T1020659.Admin.Controllers
             }
             string hashedPassword = CryptHelper.HashMD5(password);
 
-            //TODO: Lấy thông tin tài khoản dựa vào tên đăng nhập và mật khẩu
-            //truyền username và hashedPassword kiểm tra
-
-            //Giả Lập
-            var userAccount = new UserAccount()
-            {
-                UserId = "1",
-                UserName = username,
-                DisplayName = "Nguyễn Thị Thảo Mai",
-                Email = username,
-                Photo = "nophoto.png",
-                RoleNames = $"{WebUserRoles.Administrator},{WebUserRoles.DataManager}"   //"admin,sale"
-            };
+            // Lấy thông tin tài khoản thực từ cơ sở dữ liệu
+            var userAccount = await UserAccountService.AuthenticateAsync(username, password);
             if (userAccount == null)
             {
-                ModelState.AddModelError("Error", "Đăng nhập không thành công");
+                ModelState.AddModelError("Error", "Đăng nhập không thành công (Sai tên đăng nhập hoặc mật khẩu)");
                 return View();
             }
-            //Thông tin đăng nhập hợp lệ:
 
-            //Chuẩn bị thông tin mà sẽ ghi lên "Giấy chứng nhận"
+            // Thông tin đăng nhập hợp lệ:
             var userData = new WebUserData()
             {
                 UserId = userAccount.UserId,
@@ -63,12 +52,13 @@ namespace SV22T1020659.Admin.Controllers
                 DisplayName = userAccount.DisplayName,
                 Email = userAccount.Email,
                 Photo = userAccount.Photo,
-                Roles = userAccount.RoleNames.Split(',').ToList()
+                Roles = userAccount.RoleNames?.Split(',').ToList() ?? new List<string>()
             };
-            //Tạo ra giấy chứng nhận(ClaimPrincipal)
+
+            // Tạo giấy chứng nhận
             var principal = userData.CreatePrincipal();
 
-            //Trao Giấy chứng nhận cho phía client
+            // Trao giấy chứng nhận cho phía client
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             return RedirectToAction("Index", "Home");

@@ -1,3 +1,4 @@
+@using SV22T1020659.Models.Sales
 @{
     ViewBag.Title = "Lập đơn hàng";
 }
@@ -8,17 +9,14 @@
         <div class="card card-outline card-primary h-100">
             <div class="card-header">
                 <h5 class="mb-0">
-                    <i class="bi bi-search"></i>
-                    Lựa chọn hàng cần bán
+                    <i class="bi bi-search"></i> Lựa chọn hàng cần bán
                 </h5>
             </div>
-
             <div class="card-body">
                 <!-- Search -->
                 <form id="formSearchProduct" action="~/Order/SearchProduct" method="get" class="mb-3">
                     <div class="input-group">
-                        <input class="form-control"
-                               name="searchValue" id="inputSearchProduct"
+                        <input class="form-control" name="searchValue" id="inputSearchProduct"
                                placeholder="Nhập tên mặt hàng cần tìm" autofocus />
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-search"></i>
@@ -26,9 +24,8 @@
                     </div>
                 </form>
 
-                <!-- Vùng hiển thị danh sách mặt hàng tìm được -->
                 <div id="searchProductResult">
-                    @* (Được tải bằng AJAX) *@
+                    <!-- Tải AJAX tìm kiếm -->
                 </div>
             </div>
         </div>
@@ -37,7 +34,16 @@
     <!-- Giỏ hàng và thông tin khách hàng -->
     <div class="col-md-8">
         <div id="showCart">
-            @* (Được tải bằng AJAX) *@
+            <!-- Tải AJAX giỏ hàng & form khách hàng -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal Dialog (Sửa lỗi cấu trúc để hiển thị chuẩn xác) -->
+<div class="modal fade" id="dialogModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" id="dialogModalContent">
+            @* AJAX nạp content xác nhận xóa vào đây *@
         </div>
     </div>
 </div>
@@ -45,50 +51,63 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Khi form tìm kiếm sản phẩm được submit
             $("#formSearchProduct").on("submit", function (e) {
                 e.preventDefault();
                 searchProduct(1);
             });
 
-            // Tải dữ liệu ban đầu
             searchProduct(1);
             showCart();
 
-            // Lắng nghe sự kiện submit form AddToCart (vì form này được tạo động bằng AJAX)
-            $(document).on("submit", ".cart-item-form", function (e) {
+            // Mở hộp thoại modal ở giữa màn hình (Logic cũ)
+            $(document).on("click", ".open-modal", function (e) {
+                e.preventDefault();
+                var url = $(this).attr("href");
+                $.get(url, function (data) {
+                    $("#dialogModalContent").html(data); // Nạp vào modal-content
+                    $("#dialogModal").modal("show");
+                });
+            });
+
+            // Xử lý các action nhanh (Xóa toàn bộ giỏ hàng)
+            $(document).on("click", ".ajax-cart-action", function (e) {
+                e.preventDefault();
+                var url = $(this).attr("href");
+                if ($(this).attr("onclick") && !confirm("Xác nhận xóa giỏ hàng?")) return;
+                $.get(url, function () { 
+                    showCart(); 
+                });
+            });
+
+            // Xử lý submit Form lập đơn hàng (AJAX)
+            $(document).on("submit", "#formOrderInit", function (e) {
                 e.preventDefault();
                 var form = $(this);
-                var url = form.attr("action");
-                var method = form.attr("method");
-                var data = form.serialize();
-
-                $.ajax({
-                    url: url,
-                    type: method,
-                    data: data,
-                    success: function (res) {
-                        if (res !== "") {
-                            $("#showCart").html(res);
-                        }
-                    }
+                $.post(form.attr('action'), form.serialize(), function (res) {
+                    if (isNaN(res)) alert(res);
+                    else window.location.href = '/Order/Detail/' + res;
                 });
             });
         });
 
-        // Hàm tìm kiếm mặt hàng
         function searchProduct(page) {
             var searchValue = $("#inputSearchProduct").val();
-            var url = $("#formSearchProduct").attr("action");
-            $.get(url, { searchValue: searchValue, page: page }, function (html) {
+            $.get("/Order/SearchProduct", { searchValue: searchValue, page: page }, function (html) {
                 $("#searchProductResult").html(html);
             });
         }
 
-        // Hàm hiển thị giỏ hàng
         function showCart() {
             $.get("/Order/ShowCart", function (html) {
                 $("#showCart").html(html);
+            });
+        }
+
+        function addCartItem(event, form) {
+            if (event) event.preventDefault();
+            $.post("/Order/AddCartItem", $(form).serialize(), function (data) {
+                if (data.code === 1) showCart();
+                else alert(data.message);
             });
         }
     </script>
