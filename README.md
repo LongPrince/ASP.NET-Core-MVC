@@ -75,11 +75,11 @@
 │                      MODELS LAYER                               │
 │               SV22T1020659.Models                               │
 │                                                                 │
-│   Catalog/   HR/        Partner/    Sales/    Common/  Security/│
-│   Product    Employee   Customer    Order     PagedResult       │
-│   Category              Supplier    CartItem  PaginationInput   │
-│   ProductPhoto          Shipper     OrderDetail                 │
-│   ProductAttribute                  OrderViewInfo               │
+│   Catalog/   HR/       Partner/   Sales/    Common/  Security/  │
+│   Product    Employee  Customer   Order     PagedResult         │
+│   Category             Supplier   CartItem  PaginationInput     │
+│   ProductPhoto         Shipper    OrderDetail                   │
+│   ProductAttribute                OrderViewInfo                 │
 └──────────────────────────────┬──────────────────────────────────┘
                                │  đọc/ghi
                                ▼
@@ -359,13 +359,13 @@ SV22T1020659.Models ←───────────────────
 SV22T1020659.Shop ────────────────────────────────────────────────────┐
        │  tham chiếu                                                  │
        ▼                                                              │
-SV22T1020659.BusinessLayers (dùng chung với Admin)                   │
+SV22T1020659.BusinessLayers (dùng chung với Admin)                    │
        │                                                              │
        ▼                                                              │
-SV22T1020659.DataLayers                                              │
+SV22T1020659.DataLayers                                               │
        │                                                              │
        ▼                                                              │
-SV22T1020659.Models ←────────────────────────────────────────────────┘
+SV22T1020659.Models ←-────────────────────────────────────────────────┘
 ```
 
 ### Quy tắc phụ thuộc (Dependency Rules)
