@@ -1,0 +1,143 @@
+@model SV22T1020659.Models.Catalog.Product
+@{
+    ViewData["Title"] = Model.ProductName;
+    var adminUrl = SV22T1020659.Shop.AppCodes.WebConfiguration.AdminBaseUrl;
+    var photos = ViewBag.Photos as List<SV22T1020659.Models.Catalog.ProductPhoto> ?? new List<SV22T1020659.Models.Catalog.ProductPhoto>();
+    var attributes = ViewBag.Attributes as List<SV22T1020659.Models.Catalog.ProductAttribute> ?? new List<SV22T1020659.Models.Catalog.ProductAttribute>();
+}
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4 p-lg-5">
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="product-gallery">
+                    <div class="main-image mb-3 text-center bg-light rounded p-4">
+                        <img id="mainImg" src="@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/600x600?text=No+Image" : $"{adminUrl}/images/products/{Model.Photo}")" 
+                             class="img-fluid" alt="@Model.ProductName" style="max-height: 500px; object-fit: contain;">
+                    </div>
+                    @if (photos.Count > 0)
+                    {
+                        <div class="row g-2">
+                            <div class="col-3">
+                                <img src="@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/100x100?text=No+Image" : $"{adminUrl}/images/products/{Model.Photo}")" 
+                                     class="img-thumbnail cursor-pointer active-thumb" onclick="changeImage(this, '@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/600x600?text=No+Image" : $"{adminUrl}/images/products/{Model.Photo}")')" style="height: 80px; object-fit: cover;">
+                            </div>
+                            @foreach (var photo in photos.Where(p => !p.IsHidden).OrderBy(p => p.DisplayOrder))
+                            {
+                                <div class="col-3">
+                                    <img src="@($"{adminUrl}/images/products/{photo.Photo}")" 
+                                         class="img-thumbnail cursor-pointer" onclick="changeImage(this, '@($"{adminUrl}/images/products/{photo.Photo}")')" 
+                                         style="height: 80px; object-fit: cover;" title="@photo.Description">
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-lg-6 ps-lg-5">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a asp-action="Index">Sản phẩm</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Chi tiết</li>
+                    </ol>
+                </nav>
+
+                <h2 class="fw-bold mb-3">@Model.ProductName</h2>
+                
+                <div class="d-flex align-items-center mb-4">
+                    <span class="fs-3 fw-bold text-primary me-3">@Model.Price.ToString("N0")đ</span>
+                    @if (!Model.IsSelling)
+                    {
+                        <span class="badge bg-secondary">Ngừng kinh doanh</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Đang bán</span>
+                    }
+                </div>
+
+                <p class="text-muted mb-4">@Model.ProductDescription</p>
+
+                <div class="info-list mb-4">
+                    <div class="row mb-2">
+                        <div class="col-4 fw-bold">Đơn vị tính:</div>
+                        <div class="col-8">@Model.Unit</div>
+                    </div>
+                </div>
+
+                @if (Model.IsSelling)
+                {
+                    <div class="action-buttons mt-5">
+                        <form id="addToCartForm" class="row g-3 align-items-center">
+                            <input type="hidden" name="id" value="@Model.ProductID" />
+                            <div class="col-auto">
+                                <label for="quantity" class="form-label d-none">Số lượng</label>
+                                <div class="input-group" style="width: 140px;">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="changeQty(-1)">-</button>
+                                    <input type="number" id="quantity" name="quantity" class="form-control text-center" value="1" min="1">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="changeQty(1)">+</button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <button type="button" id="btnAddToCart" class="btn btn-primary btn-lg w-100 rounded-pill">
+                                    <i class="fa-solid fa-cart-plus me-2"></i>Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Attributes Section -->
+        @if (attributes.Count > 0)
+        {
+            <div class="mt-5 pt-4 border-top">
+                <h4 class="fw-bold mb-4">Thông số kỹ thuật</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tbody>
+                            @foreach (var attr in attributes.OrderBy(a => a.DisplayOrder))
+                            {
+                                <tr>
+                                    <th style="width: 30%;">@attr.AttributeName</th>
+                                    <td>@attr.AttributeValue</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .cursor-pointer { cursor: pointer; }
+        .active-thumb { border-color: #0d6efd !important; border-width: 2px; }
+        .img-thumbnail:hover { border-color: #0d6efd; transition: all 0.2s ease; }
+    </style>
+    <script>
+        function changeImage(element, src) {
+            document.getElementById('mainImg').src = src;
+            document.querySelectorAll('.img-thumbnail').forEach(img => img.classList.remove('active-thumb'));
+            element.classList.add('active-thumb');
+        }
+
+        function changeQty(offset) {
+            const input = document.getElementById('quantity');
+            let val = parseInt(input.value) + offset;
+            if (val < 1) val = 1;
+            input.value = val;
+        }
+
+        // Placeholder for Add to Cart
+        document.getElementById('btnAddToCart')?.addEventListener('click', function() {
+            alert('Chức năng thêm vào giỏ hàng sẽ được triển khai ở bước tiếp theo!');
+        });
+    </script>
+}

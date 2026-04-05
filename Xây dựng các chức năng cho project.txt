@@ -1,0 +1,52 @@
+Xây dựng các chức năng cho project <SolutionName>.Shop
+dành cho khách hàng (Customer) với các chức năng chính sau:
+1.   Đăng ký tài khoản mới.
+2.  Đăng nhập vào hệ thống.
+3.  Quản lý thông tin cá nhân và mật khẩu.
+4.  Xem, tìm kiếm danh mục mặt hàng theo loại hàng, tên hàng, khoảng giá.
+5. Xem thông tin chi tiết của mặt hàng.
+6. Đưa hàng vào giỏ hàng
+7.  Quản lý giỏ hàng
+8. Đặt mua hàng
+9. Theo dõi trạng thái xử lý của đơn hàng.
+10. Theo dõi lịch sử mua hàng của cá nhân
+
+//TODO: 5/4
+
++Xem, tìm kiếm danh mục mặt hàng theo loại hàng, tên hàng, khoảng giá.
++Xem thông tin chi tiết của mặt hàng.
+Luồng sự kiện:
+    File tạo ra:
+-Proposed Changes
+-Component: SV22T1020659.Shop
+Triển khai Controller, Models và Views mới cho Product.
+
+[NEW] 
+-ProductController.cs
+-Index: Tiếp nhận ProductSearchInput, gọi CatalogDataService.ListProductsAsync. Trả về view kèm phân trang.
+
+-Detail: Tiếp nhận id, gọi CatalogDataService.GetProductAsync, ListPhotosAsync, ListAttributesAsync.
+
+[NEW] 
+- ProductSearchViewModel.cs
+Chứa kết quả PagedResult<Product> và danh sách Category để hiển thị bộ lọc sidebar.
+
+[NEW] 
+- Index.cshtml
++ Giao diện danh sách sản phẩm:
++ Sidebar: Lọc theo Loại hàng (Category).
++ Header: Ô tìm kiếm tên sản phẩm + Lọc khoảng giá.
++ Body: Grid hiển thị các Card sản phẩm (Ảnh, Tên, Giá, Nút Xem chi tiết).
+- Footer: Phân trang.
+
+[NEW] 
+- Detail.cshtml
++ Giao diện chi tiết:
++ Ảnh sản phẩm (có thể hiển thị album ảnh).
++ Tên, Giá, Mô tả.
++ Danh sách thuộc tính (Kích cỡ, màu sắc...).
++ Nút "Thêm vào giỏ hàng".
+
+
+Preview
++ Luồng đăng ký đăng nhập

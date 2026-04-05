@@ -1,0 +1,145 @@
+@model SV22T1020659.Shop.Models.ProductSearchViewModel
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    var adminUrl = SV22T1020659.Shop.AppCodes.WebConfiguration.AdminBaseUrl;
+}
+
+<div class="row">
+    <!-- Sidebar -->
+    <div class="col-lg-3">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-list me-2"></i>Loại hàng</h5>
+                <ul class="list-unstyled custom-sidebar-nav">
+                    <li>
+                        <a href="@Url.Action("Index", new { SearchValue = Model.SearchValue, CategoryID = 0, MinPrice = Model.MinPrice, MaxPrice = Model.MaxPrice })" 
+                           class="@(Model.CategoryID == 0 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                            Tất cả sản phẩm
+                        </a>
+                    </li>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <li>
+                            <a href="@Url.Action("Index", new { SearchValue = Model.SearchValue, CategoryID = cat.CategoryID, MinPrice = Model.MinPrice, MaxPrice = Model.MaxPrice })" 
+                               class="@(Model.CategoryID == cat.CategoryID ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                                @cat.CategoryName
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <hr class="my-4">
+
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-tags me-2"></i>Khoảng giá</h5>
+                <ul class="list-unstyled mb-3">
+                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 0, MaxPrice = 1000000 })" class="text-muted text-decoration-none d-block py-1">Dưới 1,000,000đ</a></li>
+                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 1000000, MaxPrice = 5000000 })" class="text-muted text-decoration-none d-block py-1">1,000,000đ - 5,000,000đ</a></li>
+                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 5000000, MaxPrice = 10000000 })" class="text-muted text-decoration-none d-block py-1">5,000,000đ - 10,000,000đ</a></li>
+                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 10000000, MaxPrice = 0 })" class="text-muted text-decoration-none d-block py-1">Trên 10,000,000đ</a></li>
+                </ul>
+
+                <form action="@Url.Action("Index")" method="get">
+                    <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
+                    <input type="hidden" name="SearchValue" value="@Model.SearchValue" />
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="number" name="MinPrice" class="form-control form-control-sm" placeholder="Từ" value="@(Model.MinPrice > 0 ? Model.MinPrice.ToString("0") : "")">
+                        </div>
+                        <div class="col-6">
+                            <input type="number" name="MaxPrice" class="form-control form-control-sm" placeholder="Đến" value="@(Model.MaxPrice > 0 ? Model.MaxPrice.ToString("0") : "")">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">Áp dụng</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-lg-9">
+        <!-- Search Bar -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-3">
+                <form action="@Url.Action("Index")" method="get" class="row g-2">
+                    <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
+                    <input type="hidden" name="MinPrice" value="@Model.MinPrice" />
+                    <input type="hidden" name="MaxPrice" value="@Model.MaxPrice" />
+                    <div class="col-md-10">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                            <input type="text" name="SearchValue" class="form-control border-start-0 ps-0" placeholder="Tìm kiếm sản phẩm..." value="@Model.SearchValue">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <p class="text-muted mb-0">Tìm thấy <strong>@Model.Result.RowCount</strong> sản phẩm</p>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="row g-4 mb-4">
+            @foreach (var item in Model.Result.DataItems)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 border-0 shadow-sm product-card">
+                        <div class="position-relative">
+                            <img src="@(string.IsNullOrEmpty(item.Photo) ? "https://via.placeholder.com/300x300?text=No+Image" : $"{adminUrl}/images/products/{item.Photo}")" 
+                                 class="card-img-top p-3" alt="@item.ProductName" style="height: 250px; object-fit: contain;">
+                            @if (!item.IsSelling)
+                            {
+                                <span class="position-absolute top-0 end-0 m-3 badge bg-secondary">Ngừng kinh doanh</span>
+                            }
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h6 class="card-title fw-bold text-dark mb-2">@item.ProductName</h6>
+                            <p class="text-primary fw-bold fs-5 mb-3">@item.Price.ToString("N0")đ</p>
+                            <div class="mt-auto">
+                                <a asp-action="Detail" asp-route-id="@item.ProductID" class="btn btn-outline-primary btn-sm w-100 rounded-pill">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (Model.Result.PageCount > 1)
+        {
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    @foreach (var pageItem in Model.Result.GetDisplayPages())
+                    {
+                        if (pageItem.Page == 0)
+                        {
+                            <li class="page-item disabled"><span class="page-link border-0">...</span></li>
+                        }
+                        else
+                        {
+                            <li class="page-item @(pageItem.Page == Model.Page ? "active" : "")">
+                                <a class="page-link border-0 shadow-sm rounded mx-1" 
+                                   href="@Url.Action("Index", new { Page = pageItem.Page, SearchValue = Model.SearchValue, CategoryID = Model.CategoryID, MinPrice = Model.MinPrice, MaxPrice = Model.MaxPrice })">
+                                    @pageItem.Page
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        .product-card { transition: transform 0.3s ease; }
+        .product-card:hover { transform: translateY(-5px); }
+        .custom-sidebar-nav li a:hover { color: #0d6efd !important; background: #f8f9fa; border-radius: 4px; padding-left: 8px !important; transition: all 0.2s ease; }
+    </style>
+}
