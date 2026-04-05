@@ -1,4 +1,4 @@
-# 📦 LiteCommerce – Tài Liệu Kiến Trúc Dự Án
+# 📦 Tài Liệu Kiến Trúc Dự Án
 
 > **Công nghệ:** ASP.NET Core MVC · C# · SQL Server · Razor Views  
 > **Mô hình kiến trúc:** N-Layer (Multi-tier / Phân tầng)
@@ -61,13 +61,13 @@
 │              SV22T1020659.DataLayers                            │
 │                                                                 │
 │   Interfaces/                  SQLServer/                       │
-│   IGenericRepository<T>   →    CategoryRepository              │
-│   IProductRepository      →    ProductRepository               │
-│   IOrderRepository        →    OrderRepository                 │
-│   IEmployeeRepository     →    EmployeeRepository              │
-│   ICustomerRepository     →    CustomerRepository              │
-│   IUserAccountRepository  →    EmployeeAccountRepository       │
-│                           →    CustomerAccountRepository       │
+│   IGenericRepository<T>   →    CategoryRepository               │
+│   IProductRepository      →    ProductRepository                │
+│   IOrderRepository        →    OrderRepository                  │
+│   IEmployeeRepository     →    EmployeeRepository               │
+│   ICustomerRepository     →    CustomerRepository               │
+│   IUserAccountRepository  →    EmployeeAccountRepository        │
+│                           →    CustomerAccountRepository        │
 └──────────────────────────────┬──────────────────────────────────┘
                                │  sử dụng
                                ▼
@@ -79,7 +79,7 @@
 │   Product    Employee   Customer    Order     PagedResult       │
 │   Category              Supplier    CartItem  PaginationInput   │
 │   ProductPhoto          Shipper     OrderDetail                 │
-│   ProductAttribute                  OrderViewInfo              │
+│   ProductAttribute                  OrderViewInfo               │
 └──────────────────────────────┬──────────────────────────────────┘
                                │  đọc/ghi
                                ▼
