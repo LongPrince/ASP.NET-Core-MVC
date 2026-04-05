@@ -1,6 +1,5 @@
 # 📦 LiteCommerce – Tài Liệu Kiến Trúc Dự Án
 
-> **Mã sinh viên:** SV22T1020659  
 > **Công nghệ:** ASP.NET Core MVC · C# · SQL Server · Razor Views  
 > **Mô hình kiến trúc:** N-Layer (Multi-tier / Phân tầng)
 
