@@ -1,5 +1,5 @@
 ---
-description: 
+description: BÁO CÁO TIẾN ĐỘ HOÀN THÀNH
 ---
 
 # Báo cáo hoàn thành: Giai đoạn 1 Shop App (Đăng ký, Đăng nhập, Hồ sơ)
@@ -28,4 +28,37 @@ description:
 - **Tiện ích Đăng xuất:** Bổ sung nút Đăng xuất trực quan tại Sidebar của trang cá nhân (Profile) và trang Đổi mật khẩu.
 - 4 View tương ứng (`Register.cshtml`, `Login.cshtml`, `Profile.cshtml`, `ChangePassword.cshtml`) được thiết kế thẩm mỹ cao, dạng Card-Auth hiện đại.
 
-.
+---
+
+# Giai đoạn 2: Tìm kiếm & Chi tiết sản phẩm (05/04/2026)
+
+## 🎯 Mục tiêu hoàn thành
+Đã triển khai thành công tính năng cốt lõi cho phép khách hàng duyệt và tìm kiếm sản phẩm:
+4. Xem, tìm kiếm danh mục mặt hàng theo loại hàng, tên hàng, khoảng giá.
+5. Xem thông tin chi tiết của mặt hàng.
+
+## 🛠️ Các thay đổi chính đã thực hiện
+
+### Backend & Cấu trúc
+- **[ProductController.cs]
+- Xử lý logic tìm kiếm, phân trang và hiển thị chi tiết. 
+- **[ProductSearchViewModel.cs]: 
+- ViewModel tối ưu chứa kết quả phân trang và dữ liệu bổ trợ cho Sidebar.
+- **[Program.cs]
+- Cấu hình `PhysicalFileProvider` ánh xạ thư mục ảnh của Admin vào Shop, giải quyết triệt để lỗi không hiển thị hình ảnh sản phẩm.
+
+### Giao diện (Frontend)
+- **Trang Danh sách (`Index.cshtml`)**:
+    - Sidebar thông minh: Lọc theo Loại hàng và Khoảng giá.
+    - **Highlight chủ động**: Tự động làm nổi bật (màu xanh) danh mục hoặc khoảng giá đang được chọn.
+    - Grid sản phẩm: Thiết kế dạng Card hiện đại, có hiệu ứng hover và badge trạng thái (Đang bán/Ngừng kinh doanh).
+- **Trang Chi tiết (`Detail.cshtml`)**:
+    - Thư viện ảnh: Click vào ảnh con để đổi ảnh chính mượt mà qua JavaScript.
+    - Thông tin chi tiết: Giá, mô tả, đơn vị tính và bảng thông số kỹ thuật (Attributes).
+
+## 🔄 Luồng sự kiện chính (Event Flow)
+1. **Tìm kiếm/Lọc**: Người dùng chọn danh mục/giá -> Gửi yêu cầu GET -> Controller tiếp nhận tham số -> Gọi Business Layer (`CatalogDataService`) -> Trả về kết quả phân trang -> View hiển thị lưới sản phẩm.
+2. **Xem chi tiết**: Click từ danh sách -> Gửi ProductID -> Controller lấy thông tin chi tiết + Ảnh + Thuộc tính -> View nạp dữ liệu và khởi tạo Gallery ảnh.
+
+---
+*Cập nhật lần cuối: 4:05PM - 05/04/2026*

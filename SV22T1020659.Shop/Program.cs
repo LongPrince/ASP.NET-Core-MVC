@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +44,14 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Cấu hình để Shop có thể truy cập được ảnh từ thư mục của Admin
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "..", "SV22T1020659.Admin", "wwwroot", "images", "products")),
+    RequestPath = "/images/products"
+});
 
 app.UseRouting();
 app.UseAuthentication();

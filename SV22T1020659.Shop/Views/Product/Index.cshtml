@@ -32,27 +32,31 @@
 
                 <h5 class="fw-bold mb-3"><i class="fa-solid fa-tags me-2"></i>Khoảng giá</h5>
                 <ul class="list-unstyled mb-3">
-                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 0, MaxPrice = 1000000 })" class="text-muted text-decoration-none d-block py-1">Dưới 1,000,000đ</a></li>
-                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 1000000, MaxPrice = 5000000 })" class="text-muted text-decoration-none d-block py-1">1,000,000đ - 5,000,000đ</a></li>
-                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 5000000, MaxPrice = 10000000 })" class="text-muted text-decoration-none d-block py-1">5,000,000đ - 10,000,000đ</a></li>
-                    <li><a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 10000000, MaxPrice = 0 })" class="text-muted text-decoration-none d-block py-1">Trên 10,000,000đ</a></li>
+                    <li>
+                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 0, MaxPrice = 1000000 })" 
+                           class="@(Model.MinPrice == 0 && Model.MaxPrice == 1000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                           Dưới 1,000,000đ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 1000000, MaxPrice = 5000000 })" 
+                           class="@(Model.MinPrice == 1000000 && Model.MaxPrice == 5000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                           1,000,000đ - 5,000,000đ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 5000000, MaxPrice = 10000000 })" 
+                           class="@(Model.MinPrice == 5000000 && Model.MaxPrice == 10000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                           5,000,000đ - 10,000,000đ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 10000000, MaxPrice = 0 })" 
+                           class="@(Model.MinPrice == 10000000 && Model.MaxPrice == 0 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                           Trên 10,000,000đ
+                        </a>
+                    </li>
                 </ul>
-
-                <form action="@Url.Action("Index")" method="get">
-                    <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
-                    <input type="hidden" name="SearchValue" value="@Model.SearchValue" />
-                    <div class="row g-2">
-                        <div class="col-6">
-                            <input type="number" name="MinPrice" class="form-control form-control-sm" placeholder="Từ" value="@(Model.MinPrice > 0 ? Model.MinPrice.ToString("0") : "")">
-                        </div>
-                        <div class="col-6">
-                            <input type="number" name="MaxPrice" class="form-control form-control-sm" placeholder="Đến" value="@(Model.MaxPrice > 0 ? Model.MaxPrice.ToString("0") : "")">
-                        </div>
-                        <div class="col-12 mt-2">
-                            <button type="submit" class="btn btn-primary btn-sm w-100">Áp dụng</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -90,7 +94,7 @@
                 <div class="col-md-4 col-sm-6">
                     <div class="card h-100 border-0 shadow-sm product-card">
                         <div class="position-relative">
-                            <img src="@(string.IsNullOrEmpty(item.Photo) ? "https://via.placeholder.com/300x300?text=No+Image" : $"{adminUrl}/images/products/{item.Photo}")" 
+                            <img src="@(string.IsNullOrEmpty(item.Photo) ? "https://via.placeholder.com/300x300?text=No+Image" : $"/images/products/{item.Photo}")" 
                                  class="card-img-top p-3" alt="@item.ProductName" style="height: 250px; object-fit: contain;">
                             @if (!item.IsSelling)
                             {

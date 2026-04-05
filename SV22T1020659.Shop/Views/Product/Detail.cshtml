@@ -13,21 +13,21 @@
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="product-gallery">
                     <div class="main-image mb-3 text-center bg-light rounded p-4">
-                        <img id="mainImg" src="@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/600x600?text=No+Image" : $"{adminUrl}/images/products/{Model.Photo}")" 
+                        <img id="mainImg" src="@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/600x600?text=No+Image" : $"/images/products/{Model.Photo}")" 
                              class="img-fluid" alt="@Model.ProductName" style="max-height: 500px; object-fit: contain;">
                     </div>
                     @if (photos.Count > 0)
                     {
                         <div class="row g-2">
                             <div class="col-3">
-                                <img src="@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/100x100?text=No+Image" : $"{adminUrl}/images/products/{Model.Photo}")" 
-                                     class="img-thumbnail cursor-pointer active-thumb" onclick="changeImage(this, '@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/600x600?text=No+Image" : $"{adminUrl}/images/products/{Model.Photo}")')" style="height: 80px; object-fit: cover;">
+                                <img src="@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/100x100?text=No+Image" : $"/images/products/{Model.Photo}")" 
+                                     class="img-thumbnail cursor-pointer active-thumb" onclick="changeImage(this, '@(string.IsNullOrEmpty(Model.Photo) ? "https://via.placeholder.com/600x600?text=No+Image" : $"/images/products/{Model.Photo}")')" style="height: 80px; object-fit: cover;">
                             </div>
                             @foreach (var photo in photos.Where(p => !p.IsHidden).OrderBy(p => p.DisplayOrder))
                             {
                                 <div class="col-3">
-                                    <img src="@($"{adminUrl}/images/products/{photo.Photo}")" 
-                                         class="img-thumbnail cursor-pointer" onclick="changeImage(this, '@($"{adminUrl}/images/products/{photo.Photo}")')" 
+                                    <img src="@($"/images/products/{photo.Photo}")" 
+                                         class="img-thumbnail cursor-pointer" onclick="changeImage(this, '@($"/images/products/{photo.Photo}")')" 
                                          style="height: 80px; object-fit: cover;" title="@photo.Description">
                                 </div>
                             }

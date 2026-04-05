@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SV22T1020659.Shop.Controllers
 {
+    /// <summary>
+    /// Controller xử lý các chức năng liên quan đến Sản phẩm cho khách hàng.
+    /// </summary>
     public class ProductController : Controller
     {
         private const int PAGE_SIZE = 12; // Số sản phẩm trên mỗi trang
