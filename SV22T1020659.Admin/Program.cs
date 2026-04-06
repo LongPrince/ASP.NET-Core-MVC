@@ -1,6 +1,6 @@
-﻿using SV22T1020659.Admin;
+﻿using System.Globalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Globalization;
+using SV22T1020659.Admin;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +16,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(option =>
                 {
-                    option.Cookie.Name = "LiteCommerce.Admin";
+                    option.Cookie.Name = "SV22T1020659.Admin";
                     option.LoginPath = "/Account/Login";
                     option.AccessDeniedPath = "/Account/AccessDenied";
                     option.ExpireTimeSpan = TimeSpan.FromDays(7);

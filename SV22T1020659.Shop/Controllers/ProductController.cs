@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using SV22T1020659.BusinessLayers;
 using SV22T1020659.Models.Catalog;
 using SV22T1020659.Models.Common;
-using SV22T1020659.Shop.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,21 +34,15 @@ namespace SV22T1020659.Shop.Controllers
                 SearchValue = ""
             });
 
-            // Chuẩn bị ViewModel
-            var model = new ProductSearchViewModel
-            {
-                Page = input.Page,
-                PageSize = input.PageSize,
-                SearchValue = input.SearchValue,
-                CategoryID = input.CategoryID,
-                SupplierID = input.SupplierID,
-                MinPrice = input.MinPrice,
-                MaxPrice = input.MaxPrice,
-                Result = productResult,
-                Categories = categoryResult.DataItems
-            };
+            // Lưu vào ViewBag thay vì ViewModel tùy chỉnh
+            ViewBag.SearchValue = input.SearchValue ?? "";
+            ViewBag.CategoryID = input.CategoryID;
+            ViewBag.SupplierID = input.SupplierID;
+            ViewBag.MinPrice = input.MinPrice;
+            ViewBag.MaxPrice = input.MaxPrice;
+            ViewBag.Categories = categoryResult.DataItems;
 
-            return View(model);
+            return View(productResult);
         }
 
         /// <summary>

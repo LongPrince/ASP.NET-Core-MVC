@@ -1,7 +1,6 @@
 @model SV22T1020659.Models.Catalog.Product
 @{
     ViewData["Title"] = Model.ProductName;
-    var adminUrl = SV22T1020659.Shop.AppCodes.WebConfiguration.AdminBaseUrl;
     var photos = ViewBag.Photos as List<SV22T1020659.Models.Catalog.ProductPhoto> ?? new List<SV22T1020659.Models.Catalog.ProductPhoto>();
     var attributes = ViewBag.Attributes as List<SV22T1020659.Models.Catalog.ProductAttribute> ?? new List<SV22T1020659.Models.Catalog.ProductAttribute>();
 }
@@ -135,9 +134,10 @@
             input.value = val;
         }
 
-        // Placeholder for Add to Cart
+        // Thêm vào Giỏ hàng
         document.getElementById('btnAddToCart')?.addEventListener('click', function() {
-            alert('Chức năng thêm vào giỏ hàng sẽ được triển khai ở bước tiếp theo!');
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            addToCart(@Model.ProductID, quantity);
         });
     </script>
 }

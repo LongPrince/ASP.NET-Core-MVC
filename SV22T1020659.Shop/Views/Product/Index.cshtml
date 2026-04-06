@@ -1,7 +1,8 @@
-@model SV22T1020659.Shop.Models.ProductSearchViewModel
+@model SV22T1020659.Models.Common.PagedResult<SV22T1020659.Models.Catalog.Product>
 @{
     ViewData["Title"] = "Danh sách sản phẩm";
-    var adminUrl = SV22T1020659.Shop.AppCodes.WebConfiguration.AdminBaseUrl;
+    if (Model == null) return;
+    var categories = ViewBag.Categories as List<SV22T1020659.Models.Catalog.Category> ?? new List<SV22T1020659.Models.Catalog.Category>();
 }
 
 <div class="row">
@@ -12,16 +13,16 @@
                 <h5 class="fw-bold mb-3"><i class="fa-solid fa-list me-2"></i>Loại hàng</h5>
                 <ul class="list-unstyled custom-sidebar-nav">
                     <li>
-                        <a href="@Url.Action("Index", new { SearchValue = Model.SearchValue, CategoryID = 0, MinPrice = Model.MinPrice, MaxPrice = Model.MaxPrice })" 
-                           class="@(Model.CategoryID == 0 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                        <a href="@Url.Action("Index", new { SearchValue = ViewBag.SearchValue, CategoryID = 0, MinPrice = ViewBag.MinPrice, MaxPrice = ViewBag.MaxPrice })" 
+                           class="@(ViewBag.CategoryID == 0 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
                             Tất cả sản phẩm
                         </a>
                     </li>
-                    @foreach (var cat in Model.Categories)
+                    @foreach (var cat in categories)
                     {
                         <li>
-                            <a href="@Url.Action("Index", new { SearchValue = Model.SearchValue, CategoryID = cat.CategoryID, MinPrice = Model.MinPrice, MaxPrice = Model.MaxPrice })" 
-                               class="@(Model.CategoryID == cat.CategoryID ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                            <a href="@Url.Action("Index", new { SearchValue = ViewBag.SearchValue, CategoryID = cat.CategoryID, MinPrice = ViewBag.MinPrice, MaxPrice = ViewBag.MaxPrice })" 
+                               class="@(ViewBag.CategoryID == cat.CategoryID ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
                                 @cat.CategoryName
                             </a>
                         </li>
@@ -33,26 +34,26 @@
                 <h5 class="fw-bold mb-3"><i class="fa-solid fa-tags me-2"></i>Khoảng giá</h5>
                 <ul class="list-unstyled mb-3">
                     <li>
-                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 0, MaxPrice = 1000000 })" 
-                           class="@(Model.MinPrice == 0 && Model.MaxPrice == 1000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                        <a href="@Url.Action("Index", new { CategoryID = ViewBag.CategoryID, MinPrice = 0, MaxPrice = 1000000 })" 
+                           class="@(ViewBag.MinPrice == 0 && ViewBag.MaxPrice == 1000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
                            Dưới 1,000,000đ
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 1000000, MaxPrice = 5000000 })" 
-                           class="@(Model.MinPrice == 1000000 && Model.MaxPrice == 5000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                        <a href="@Url.Action("Index", new { CategoryID = ViewBag.CategoryID, MinPrice = 1000000, MaxPrice = 5000000 })" 
+                           class="@(ViewBag.MinPrice == 1000000 && ViewBag.MaxPrice == 5000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
                            1,000,000đ - 5,000,000đ
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 5000000, MaxPrice = 10000000 })" 
-                           class="@(Model.MinPrice == 5000000 && Model.MaxPrice == 10000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                        <a href="@Url.Action("Index", new { CategoryID = ViewBag.CategoryID, MinPrice = 5000000, MaxPrice = 10000000 })" 
+                           class="@(ViewBag.MinPrice == 5000000 && ViewBag.MaxPrice == 10000000 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
                            5,000,000đ - 10,000,000đ
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Index", new { CategoryID = Model.CategoryID, MinPrice = 10000000, MaxPrice = 0 })" 
-                           class="@(Model.MinPrice == 10000000 && Model.MaxPrice == 0 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
+                        <a href="@Url.Action("Index", new { CategoryID = ViewBag.CategoryID, MinPrice = 10000000, MaxPrice = 0 })" 
+                           class="@(ViewBag.MinPrice == 10000000 && ViewBag.MaxPrice == 0 ? "fw-bold text-primary" : "text-muted") text-decoration-none d-block py-1">
                            Trên 10,000,000đ
                         </a>
                     </li>
@@ -67,13 +68,13 @@
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body p-3">
                 <form action="@Url.Action("Index")" method="get" class="row g-2">
-                    <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
-                    <input type="hidden" name="MinPrice" value="@Model.MinPrice" />
-                    <input type="hidden" name="MaxPrice" value="@Model.MaxPrice" />
+                    <input type="hidden" name="CategoryID" value="@ViewBag.CategoryID" />
+                    <input type="hidden" name="MinPrice" value="@ViewBag.MinPrice" />
+                    <input type="hidden" name="MaxPrice" value="@ViewBag.MaxPrice" />
                     <div class="col-md-10">
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                            <input type="text" name="SearchValue" class="form-control border-start-0 ps-0" placeholder="Tìm kiếm sản phẩm..." value="@Model.SearchValue">
+                            <input type="text" name="SearchValue" class="form-control border-start-0 ps-0" placeholder="Tìm kiếm sản phẩm..." value="@ViewBag.SearchValue">
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -84,12 +85,12 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <p class="text-muted mb-0">Tìm thấy <strong>@Model.Result.RowCount</strong> sản phẩm</p>
+            <p class="text-muted mb-0">Tìm thấy <strong>@Model.RowCount</strong> sản phẩm</p>
         </div>
 
         <!-- Product Grid -->
         <div class="row g-4 mb-4">
-            @foreach (var item in Model.Result.DataItems)
+            @foreach (var item in Model.DataItems)
             {
                 <div class="col-md-4 col-sm-6">
                     <div class="card h-100 border-0 shadow-sm product-card">
@@ -104,8 +105,15 @@
                         <div class="card-body d-flex flex-column">
                             <h6 class="card-title fw-bold text-dark mb-2">@item.ProductName</h6>
                             <p class="text-primary fw-bold fs-5 mb-3">@item.Price.ToString("N0")đ</p>
-                            <div class="mt-auto">
-                                <a asp-action="Detail" asp-route-id="@item.ProductID" class="btn btn-outline-primary btn-sm w-100 rounded-pill">Xem chi tiết</a>
+                            <div class="mt-auto row g-2">
+                                <div class="col-6">
+                                    <a asp-action="Detail" asp-route-id="@item.ProductID" class="btn btn-outline-secondary btn-sm w-100 rounded-pill" title="Xem chi tiết">Chi tiết</a>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" onclick="addToCart(@item.ProductID)" class="btn btn-primary btn-sm w-100 rounded-pill" title="Thêm vào giỏ hàng">
+                                        <i class="fa-solid fa-cart-plus"></i> Thêm
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -114,11 +122,11 @@
         </div>
 
         <!-- Pagination -->
-        @if (Model.Result.PageCount > 1)
+        @if (Model.PageCount > 1)
         {
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                    @foreach (var pageItem in Model.Result.GetDisplayPages())
+                    @foreach (var pageItem in Model.GetDisplayPages())
                     {
                         if (pageItem.Page == 0)
                         {
@@ -128,7 +136,7 @@
                         {
                             <li class="page-item @(pageItem.Page == Model.Page ? "active" : "")">
                                 <a class="page-link border-0 shadow-sm rounded mx-1" 
-                                   href="@Url.Action("Index", new { Page = pageItem.Page, SearchValue = Model.SearchValue, CategoryID = Model.CategoryID, MinPrice = Model.MinPrice, MaxPrice = Model.MaxPrice })">
+                                   href="@Url.Action("Index", new { Page = pageItem.Page, SearchValue = ViewBag.SearchValue, CategoryID = ViewBag.CategoryID, MinPrice = ViewBag.MinPrice, MaxPrice = ViewBag.MaxPrice })">
                                     @pageItem.Page
                                 </a>
                             </li>
