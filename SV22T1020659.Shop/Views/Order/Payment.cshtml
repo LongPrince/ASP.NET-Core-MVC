@@ -1,0 +1,39 @@
+@model SV22T1020659.Models.Sales.Order
+@{
+    ViewData["Title"] = "Thanh toán Đơn hàng";
+    decimal totalAmount = ViewBag.TotalAmount ?? 0;
+    string qrUrl = $"https://img.vietqr.io/image/TCB-111183866868-compact2.png?amount={totalAmount}&addInfo=Don+hang+{Model.OrderID}+SDT+{Model.CustomerID}&accountName=DANG+VAN+LONG";
+}
+
+<div class="row justify-content-center mb-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow text-center">
+            <div class="card-header bg-primary text-white py-3">
+                <h4 class="mb-0 fw-bold"><i class="fa-solid fa-qrcode me-2"></i>Thanh toán chuyển khoản</h4>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <div class="alert alert-success fs-5">
+                    <i class="fa-solid fa-circle-check me-2"></i>Đặt hàng thành công! Mã đơn: <strong>#@Model.OrderID</strong>
+                </div>
+                
+                <p class="text-muted mb-4">Vui lòng mở ứng dụng ngân hàng và quét mã QR bên dưới để thanh toán.</p>
+
+                <div class="bg-light p-3 rounded-3 d-inline-block shadow-sm mb-4">
+                    <img src="@qrUrl" alt="Mã QR Thanh toán VietQR" class="img-fluid" style="max-width: 300px;" />
+                </div>
+
+                <div class="text-start bg-light p-3 rounded text-muted mb-4">
+                    <p class="mb-1"><strong>Ngân hàng:</strong> Techcombank (TCB)</p>
+                    <p class="mb-1"><strong>Số tài khoản:</strong> 1111 8386 6868</p>
+                    <p class="mb-1"><strong>Tên tài khoản:</strong> DANG VAN LONG</p>
+                    <p class="mb-1"><strong>Số tiền:</strong> <span class="text-danger fw-bold fs-5">@totalAmount.ToString("N0")đ</span></p>
+                    <p class="mb-0"><strong>Nội dung:</strong> Don hang @Model.OrderID SDT @Model.CustomerID</p>
+                </div>
+
+                <a href="~/Order" class="btn btn-outline-primary btn-lg rounded-pill px-5">
+                    <i class="fa-solid fa-clock-rotate-left me-2"></i>Xem Lịch sử Đơn hàng
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

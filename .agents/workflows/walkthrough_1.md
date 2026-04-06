@@ -30,7 +30,7 @@ description: BÁO CÁO TIẾN ĐỘ HOÀN THÀNH
 
 ---
 
-# Giai đoạn 2: Tìm kiếm & Chi tiết sản phẩm (05/04/2026)
+# Giai đoạn 2: Tìm kiếm & Chi tiết sản phẩm
 
 ## 🎯 Mục tiêu hoàn thành
 Đã triển khai thành công tính năng cốt lõi cho phép khách hàng duyệt và tìm kiếm sản phẩm:
@@ -40,11 +40,7 @@ description: BÁO CÁO TIẾN ĐỘ HOÀN THÀNH
 ## 🛠️ Các thay đổi chính đã thực hiện
 
 ### Backend & Cấu trúc
-- **[ProductController.cs]
-- Xử lý logic tìm kiếm, phân trang và hiển thị chi tiết. 
-- **[ProductSearchViewModel.cs]: 
-- ViewModel tối ưu chứa kết quả phân trang và dữ liệu bổ trợ cho Sidebar.
-- **[Program.cs]
+- Xử lý logic tìm kiếm, phân trang và hiển thị chi tiết (Dữ liệu Controller gọi đến lõi Models chung).
 - Cấu hình `PhysicalFileProvider` ánh xạ thư mục ảnh của Admin vào Shop, giải quyết triệt để lỗi không hiển thị hình ảnh sản phẩm.
 
 ### Giao diện (Frontend)
@@ -56,9 +52,39 @@ description: BÁO CÁO TIẾN ĐỘ HOÀN THÀNH
     - Thư viện ảnh: Click vào ảnh con để đổi ảnh chính mượt mà qua JavaScript.
     - Thông tin chi tiết: Giá, mô tả, đơn vị tính và bảng thông số kỹ thuật (Attributes).
 
-## 🔄 Luồng sự kiện chính (Event Flow)
-1. **Tìm kiếm/Lọc**: Người dùng chọn danh mục/giá -> Gửi yêu cầu GET -> Controller tiếp nhận tham số -> Gọi Business Layer (`CatalogDataService`) -> Trả về kết quả phân trang -> View hiển thị lưới sản phẩm.
-2. **Xem chi tiết**: Click từ danh sách -> Gửi ProductID -> Controller lấy thông tin chi tiết + Ảnh + Thuộc tính -> View nạp dữ liệu và khởi tạo Gallery ảnh.
+---
+
+# Giai đoạn 3: Giỏ hàng AJAX (Workflow 6/4)
+> [!NOTE]
+> Giai đoạn này tập trung vào trải nghiệm người dùng, đảm bảo thao tác mượt mà không tải lại trang.
+
+## 🎯 Mục tiêu hoàn thành
+6. Khách hàng thêm sản phẩm vào giỏ.
+7. Quản lý, tăng giảm số lượng, xóa sản phẩm khỏi giỏ hàng.
+
+## 🛠️ Các tiến độ kỹ thuật
+- Tích hợp hàm `SaveCart`, `GetCart` qua cơ chế Extensions `System.Text.Json` dùng cho Session.
+- Xây dựng AJAX thông minh cho các nút bấm:
+  - Thêm Toast thông báo "Đã thêm thành công" màu xanh tự tắt.
+  - Form xác nhận xóa dùng **Modal Bootstrap** trực quan thay bằng `confirm()` hộp thoại truyền thống.
+  - Bộ đếm tự động (Badge số lượng ở Header).
 
 ---
-*Cập nhật lần cuối: 4:05PM - 05/04/2026*
+
+# Giai đoạn 4: Đặt mua & VietQR (Workflow 6/4.1)
+> [!TIP]
+> Ứng dụng tích hợp tự động tạo mã VietQR theo mã ngân hàng chuẩn. Giải quyết được bài toán lọc dữ liệu Order chéo giữa Admin và Shop.
+
+## 🎯 Mục tiêu hoàn thành
+8. Đặt hàng qua form xác nhận (Lấy Session ra DB).
+9. Màn hình thanh toán chuyển khoản với mã QR động VietQR TCB.
+10. Theo dõi lịch sử và chi tiết trạng thái, lộ trình đơn hàng.
+
+## 🛠️ Thay đổi Cốt lõi
+- **Nâng cấp Cấu trúc DataLayer chạy song song (Shared)**: Bổ sung `CustomerID` vào `OrderSearchInput.cs` và sửa câu lệnh SQL trong `OrderRepository.cs` để bảo mật dữ liệu User. Ngăn chặn nguy cơ người dùng bên Shop xem được Lịch sử đơn hàng của người khác - một bước vá lỗi cấu trúc hệ thống thiết yếu kế thừa từ ứng dụng Admin cũ.
+- **OrderController**: Auth bắt buộc `[Authorize]`. Xử lý tạo Order và OrderDetail đồng bộ từ Giỏ hàng qua `SalesDataService`.
+- **Tích hợp VietQR**: Mã Sinh thành công với cú pháp Dynamic. `amount={tong_tien}` và cấu trúc Nội dung đổ ra `<img>` qua máy chủ trung gian `img.vietqr.io`.
+- **Giao diện Theo dõi (History & Detail)**: Vẽ Timeline trực quan với Bootstrap cho các bước: Đặt hàng -> Chấp nhận -> Đang giao -> Hoàn thành.
+
+---
+*Cập nhật lần cuối: 06/04/2026*

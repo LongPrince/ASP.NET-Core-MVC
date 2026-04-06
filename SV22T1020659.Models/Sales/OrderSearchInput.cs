@@ -1,4 +1,4 @@
-﻿using SV22T1020659.Models.Common;
+using SV22T1020659.Models.Common;
 
 namespace SV22T1020659.Models.Sales
 {
@@ -19,5 +19,9 @@ namespace SV22T1020659.Models.Sales
         /// Đến ngày (ngày lập đơn hàng)
         /// </summary>
         public DateTime? DateTo { get; set; }
+        /// <summary>
+        /// ID Khách hàng (dùng để lọc riêng biệt theo user, 0 nghĩa là hiển thị tất cả)
+        /// </summary>
+        public int CustomerID { get; set; } = 0;
     }
 }

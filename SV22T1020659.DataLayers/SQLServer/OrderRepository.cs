@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using SV22T1020659.DataLayers.Interfaces;
 using SV22T1020659.Models.Common;
 using SV22T1020659.Models.Sales;
@@ -88,19 +88,22 @@ namespace SV22T1020659.DataLayers.SQLServer
                                WHERE (@status = 0 OR o.Status = @status)
                                  AND (@dateFrom IS NULL OR o.OrderTime >= @dateFrom)
                                  AND (@dateTo IS NULL OR o.OrderTime <= @dateTo)
+                                 AND (@customerID = 0 OR o.CustomerID = @customerID)
                                ORDER BY o.OrderID DESC
                                OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
                                
                                SELECT COUNT(*) FROM Orders o
                                WHERE (@status = 0 OR o.Status = @status)
                                  AND (@dateFrom IS NULL OR o.OrderTime >= @dateFrom)
-                                 AND (@dateTo IS NULL OR o.OrderTime <= @dateTo);";
+                                 AND (@dateTo IS NULL OR o.OrderTime <= @dateTo)
+                                 AND (@customerID = 0 OR o.CustomerID = @customerID);";
 
                 var parameters = new
                 {
                     status = (int)input.Status,
                     dateFrom = input.DateFrom,
                     dateTo = input.DateTo,
+                    customerID = input.CustomerID,
                     offset = (input.Page - 1) * input.PageSize,
                     pageSize = input.PageSize
                 };

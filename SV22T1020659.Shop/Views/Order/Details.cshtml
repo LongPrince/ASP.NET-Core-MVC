@@ -1,0 +1,118 @@
+@model SV22T1020659.Models.Sales.OrderViewInfo
+@{
+    ViewData["Title"] = "Chi tiết Đơn hàng #" + Model.OrderID;
+    var details = ViewBag.Details as List<SV22T1020659.Models.Sales.OrderDetailViewInfo> ?? new List<SV22T1020659.Models.Sales.OrderDetailViewInfo>();
+    decimal grandTotal = details.Sum(x => x.TotalPrice);
+}
+
+<div class="mb-4 d-flex align-items-center justify-content-between">
+    <h3 class="fw-bold mb-0">Chi tiết Đơn hàng #@Model.OrderID</h3>
+    <a href="~/Order" class="btn btn-outline-secondary rounded-pill">
+        <i class="fa-solid fa-arrow-left me-2"></i>Trở về
+    </a>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white pt-4 pb-2 border-bottom-0">
+                <h5 class="fw-bold"><i class="fa-solid fa-box-open me-2 text-primary"></i>Danh sách mặt hàng</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th class="text-center">ĐVT</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-end">Đơn giá</th>
+                                <th class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var item in details)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="@(string.IsNullOrEmpty(item.Photo) ? "https://via.placeholder.com/50?text=No+Image" : $"/images/products/{item.Photo}")" 
+                                                 alt="@item.ProductName" class="rounded border me-3" style="width: 50px; height: 50px; object-fit: contain;" />
+                                            <span class="fw-semibold">@item.ProductName</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">@item.Unit</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-end">@item.SalePrice.ToString("N0")đ</td>
+                                    <td class="text-end fw-bold text-primary">@item.TotalPrice.ToString("N0")đ</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="text-end fw-bold fs-5 pt-3">Tổng cộng:</td>
+                                <td class="text-end fw-bold fs-5 text-danger pt-3">@grandTotal.ToString("N0")đ</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Thông tin đơn hàng -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h6 class="text-muted fw-bold mb-3 text-uppercase"><i class="fa-solid fa-circle-info me-2"></i>Tiến độ Đơn hàng</h6>
+                
+                <ul class="list-unstyled mb-0 ms-2" style="border-left: 2px solid #0d6efd; padding-left: 1rem;">
+                    <li class="mb-3 position-relative">
+                        <span class="position-absolute bg-primary rounded-circle" style="width: 12px; height: 12px; left: -1.45rem; top: 0.25rem;"></span>
+                        <strong>Đặt hàng thành công</strong>
+                        <div class="text-muted small">@Model.OrderTime.ToString("dd/MM/yyyy HH:mm")</div>
+                    </li>
+                    
+                    @if (Model.AcceptTime.HasValue)
+                    {
+                        <li class="mb-3 position-relative">
+                            <span class="position-absolute bg-primary rounded-circle" style="width: 12px; height: 12px; left: -1.45rem; top: 0.25rem;"></span>
+                            <strong>Chấp nhận đơn</strong>
+                            <div class="text-muted small">@Model.AcceptTime.Value.ToString("dd/MM/yyyy HH:mm")</div>
+                        </li>
+                    }
+
+                    @if (Model.ShippedTime.HasValue)
+                    {
+                        <li class="mb-3 position-relative">
+                            <span class="position-absolute bg-primary rounded-circle" style="width: 12px; height: 12px; left: -1.45rem; top: 0.25rem;"></span>
+                            <strong>Đang vận chuyển</strong>
+                            <div class="text-muted small">@Model.ShippedTime.Value.ToString("dd/MM/yyyy HH:mm")</div>
+                        </li>
+                    }
+
+                    @if (Model.FinishedTime.HasValue)
+                    {
+                        <li class="position-relative">
+                            <span class="position-absolute @(Model.Status == SV22T1020659.Models.Sales.OrderStatusEnum.Completed ? "bg-success" : "bg-danger") rounded-circle" style="width: 12px; height: 12px; left: -1.45rem; top: 0.25rem;"></span>
+                            <strong>@Model.StatusDescription</strong>
+                            <div class="text-muted small">@Model.FinishedTime.Value.ToString("dd/MM/yyyy HH:mm")</div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- Thông tin giao hàng -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6 class="text-muted fw-bold mb-3 text-uppercase"><i class="fa-solid fa-truck me-2"></i>Giao hàng</h6>
+                
+                <p class="mb-1"><strong>Người nhận:</strong> @Model.CustomerName</p>
+                <p class="mb-1"><strong>Số điện thoại:</strong> @Model.CustomerPhone</p>
+                <p class="mb-1"><strong>Tỉnh/T.Phố:</strong> @Model.DeliveryProvince</p>
+                <p class="mb-0"><strong>Địa chỉ:</strong> @Model.DeliveryAddress</p>
+            </div>
+        </div>
+    </div>
+</div>

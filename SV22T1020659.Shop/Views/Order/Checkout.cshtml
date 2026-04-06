@@ -1,0 +1,89 @@
+@model List<SV22T1020659.Models.Sales.CartItem>
+@{
+    ViewData["Title"] = "Xác nhận Đặt hàng";
+    var customer = ViewBag.Customer as SV22T1020659.Models.Partner.Customer;
+    var provinces = ViewBag.Provinces as List<SV22T1020659.Models.DataDictionary.Province> ?? new List<SV22T1020659.Models.DataDictionary.Province>();
+}
+
+<div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
+    <!-- Form Thông tin giao hàng -->
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h4 class="fw-bold"><i class="fa-solid fa-map-location-dot me-2 text-primary"></i>Thông tin giao hàng</h4>
+            </div>
+            <div class="card-body">
+                <form id="frmCheckout" action="~/Order/Checkout" method="post">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Người nhận:</label>
+                        <input type="text" class="form-control bg-light" value="@customer?.CustomerName" readonly>
+                        <div class="form-text">Tên mặc định theo tài khoản của bạn.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Số điện thoại:</label>
+                        <input type="text" class="form-control bg-light" value="@customer?.Phone" readonly>
+                    </div>
+                    
+                    <hr class="my-4" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-primary">Tỉnh/thành giao hàng (*)</label>
+                        <select class="form-select border-primary" name="deliveryProvince" required>
+                            <option value="">-- Chọn Tỉnh/Thành --</option>
+                            @foreach (var p in provinces)
+                            {
+                                if (p.ProvinceName == customer?.Province)
+                                {
+                                    <option value="@p.ProvinceName" selected>@p.ProvinceName</option>
+                                }
+                                else
+                                {
+                                    <option value="@p.ProvinceName">@p.ProvinceName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-primary">Địa chỉ chi tiết (*)</label>
+                        <textarea class="form-control border-primary" name="deliveryAddress" rows="3" required placeholder="Số nhà, đường, phường/xã...">@customer?.Address</textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tóm tắt đơn hàng -->
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm bg-light">
+            <div class="card-header bg-light border-bottom-0 pt-4 pb-0">
+                <h4 class="fw-bold"><i class="fa-solid fa-receipt me-2 text-primary"></i>Đơn hàng của bạn</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush mb-3">
+                    @foreach (var item in Model)
+                    {
+                        <li class="list-group-item bg-transparent d-flex justify-content-between lh-sm px-0 py-3">
+                            <div>
+                                <h6 class="my-0 fw-bold">@item.ProductName</h6>
+                                <small class="text-muted">SL: @item.Quantity x @item.SalePrice.ToString("N0")đ</small>
+                            </div>
+                            <span class="text-muted fw-bold">@item.TotalPrice.ToString("N0")đ</span>
+                        </li>
+                    }
+                    <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-3 mt-2 border-top border-2 border-dark">
+                        <span class="fw-bold fs-5">Tổng cộng (VND)</span>
+                        <strong class="fs-5 text-primary">@Model.Sum(x => x.TotalPrice).ToString("N0")đ</strong>
+                    </li>
+                </ul>
+
+                <button type="submit" form="frmCheckout" class="btn btn-primary btn-lg w-100 rounded-pill shadow">
+                    <i class="fa-solid fa-check-circle me-2"></i>Xác nhận Đặt hàng
+                </button>
+                <a href="~/Cart" class="btn btn-outline-secondary w-100 rounded-pill mt-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Quay lại Giỏ hàng
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
