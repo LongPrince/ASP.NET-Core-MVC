@@ -1,5 +1,4 @@
-@using SV22T1020659.Models.Sales
-@model List<CartItem>
+@model IEnumerable<SV22T1020659.Models.Sales.OrderDetailViewInfo>
 @{
     Layout = null;
     decimal totalAmount = 0;
@@ -44,6 +43,10 @@
                                     <td class="text-end">@item.SalePrice.ToString("N0")</td>
                                     <td class="text-end font-weight-bold">@item.TotalPrice.ToString("N0")</td>
                                     <td class="text-center">
+                                        <a class="btn btn-sm btn-info open-modal"
+                                           href="~/Order/EditCartItem/0?productID=@item.ProductID" title="Cập nhật">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
                                         <a class="btn btn-sm btn-danger open-modal"
                                            href="~/Order/DeleteCartItem/@item.ProductID" title="Xóa mặt hàng">
                                             <i class="bi bi-trash"></i>

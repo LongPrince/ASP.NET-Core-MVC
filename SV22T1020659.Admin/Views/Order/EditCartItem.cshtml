@@ -1,15 +1,18 @@
-﻿@{
+@model SV22T1020659.Models.Sales.OrderDetailViewInfo
+@{
     Layout = null;
 }
-<div class="modal-header">
+<div class="modal-header text-bg-primary">
     <strong class="modal-title">
-        Cập nhật chi tiết đơn hàng
+        Cập nhật mặt hàng trong giỏ hàng
     </strong>
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 </div>
 
 <div class="modal-body">
-    <form class="container-fluid">
+    <form id="formEditCartItem" action="~/Order/UpdateCartItem" method="post" class="container-fluid">
+        <input type="hidden" name="OrderID" value="@Model.OrderID" />
+        <input type="hidden" name="ProductID" value="@Model.ProductID" />
 
         <div class="row">
             <div class="col-md-8">
@@ -20,7 +23,7 @@
                     <div class="col-sm-8">
                         <input type="text"
                                class="form-control-plaintext fw-bold"
-                               value="Laptop HP Gaming VICTUS"
+                               value="@Model.ProductName"
                                readonly>
                     </div>
                 </div>
@@ -30,9 +33,10 @@
                     </label>
                     <div class="col-sm-5">
                         <input type="number"
+                               name="Quantity"
                                class="form-control text-end"
                                min="1"
-                               value="1">
+                               value="@Model.Quantity">
                     </div>
                 </div>
                 <div class="row mb-3 align-items-center">
@@ -41,28 +45,61 @@
                     </label>
                     <div class="col-sm-5">
                         <input type="text"
-                               class="form-control text-end money-input"
-                               value="23.990.000">
+                               name="SalePrice"
+                               class="form-control text-end bg-light"
+                               value="@Model.SalePrice.ToString("N0")"
+                               readonly>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 text-end">                
-                <img src="/images/products/demo.png"
-                     alt="Tên mặt hàng"
+                <img src="@(string.IsNullOrEmpty(Model.Photo) ? "/images/products/nophoto.png" : "/images/products/" + Model.Photo)"
+                     alt="@Model.ProductName"
                      class="img-thumbnail"
                      style="max-height:180px">
             </div>
         </div>
+
+        <div class="modal-footer px-0 pb-0">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save"></i> Cập nhật
+            </button>
+            <button type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                Đóng
+            </button>
+        </div>
     </form>
 </div>
 
-<div class="modal-footer">
-    <button type="submit" class="btn btn-primary">
-        Cập nhật
-    </button>
-    <button type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal">
-        Đóng
-    </button>
-</div>
+<script>
+    $(document).ready(function () {
+        $('#formEditCartItem').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function (res) {
+                    if (res.code === 1) {
+                        $('#dialogModal').modal('hide');
+                        if (typeof showCart === "function") {
+                            showCart();
+                        } else {
+                            location.reload();
+                        }
+                    } else {
+                        alert(res.message);
+                    }
+                }
+            });
+        });
+
+        // Hỗ trợ format tiền tệ nếu có helper
+        if (typeof $('.money-input').mask === 'function') {
+            $('.money-input').mask("#.##0", { reverse: true });
+        }
+    });
+</script>

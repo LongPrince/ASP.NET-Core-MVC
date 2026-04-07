@@ -14,7 +14,6 @@
                 <div class="mb-3">
                     <label class="form-label">Chọn người giao hàng:</label>
                     <select class="form-select" name="shipperID" required>
-                        <option value="">-- Chọn người giao hàng --</option>
                         @foreach (var shipper in await SelectListHelper.Shippers())
                         {
                             <option value="@shipper.Value">@shipper.Text</option>

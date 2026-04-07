@@ -1,9 +1,9 @@
+using System.Data;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using SV22T1020659.DataLayers.Interfaces;
 using SV22T1020659.Models.Common;
 using SV22T1020659.Models.Sales;
-using Microsoft.Data.SqlClient;
-using System.Data;
 
 namespace SV22T1020659.DataLayers.SQLServer
 {
@@ -56,7 +56,7 @@ namespace SV22T1020659.DataLayers.SQLServer
                                       c.ContactName as CustomerContactName,
                                       c.Email as CustomerEmail,
                                       c.Phone as CustomerPhone,
-                                      c.Address as CustomerAddress,
+                                      CONCAT(c.Address, ', ', c.Province) as CustomerAddress,
                                       s.ShipperName as ShipperName, 
                                       s.Phone as ShipperPhone
                                FROM Orders o
@@ -78,7 +78,7 @@ namespace SV22T1020659.DataLayers.SQLServer
                                       c.ContactName as CustomerContactName,
                                       c.Email as CustomerEmail,
                                       c.Phone as CustomerPhone,
-                                      c.Address as CustomerAddress,
+                                      CONCAT(c.Address, ', ', c.Province) as CustomerAddress,
                                       s.ShipperName as ShipperName, 
                                       s.Phone as ShipperPhone
                                FROM Orders o

@@ -14,6 +14,7 @@ namespace SV22T1020659.Shop.Controllers
             return View(cart);
         }
 
+        [HttpPost]
         public async Task<IActionResult> AddToCart(int id, int quantity = 1)
         {
             if (quantity <= 0)
@@ -48,6 +49,7 @@ namespace SV22T1020659.Shop.Controllers
             return Json(new { success = true, message = "Đã thêm vào giỏ hàng", cartCount = cart.Sum(m => m.Quantity) });
         }
 
+        [HttpPost]
         public IActionResult UpdateCart(int id, int quantity)
         {
             if (quantity <= 0)
@@ -66,6 +68,7 @@ namespace SV22T1020659.Shop.Controllers
             return Json(new { success = false, message = "Sản phẩm không có trong giỏ hàng" });
         }
 
+        [HttpPost]
         public IActionResult RemoveFromCart(int id)
         {
             var cart = HttpContext.Session.GetCart();
@@ -81,6 +84,7 @@ namespace SV22T1020659.Shop.Controllers
             return Json(new { success = false, message = "Sản phẩm không có trong giỏ hàng" });
         }
 
+        [HttpPost]
         public IActionResult ClearCart()
         {
             HttpContext.Session.ClearCart();
