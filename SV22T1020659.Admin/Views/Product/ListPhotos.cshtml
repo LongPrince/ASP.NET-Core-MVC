@@ -1,4 +1,6 @@
-﻿@{
+@using SV22T1020659.Models.Catalog
+@model IEnumerable<ProductPhoto>
+@{
     Layout = null;
 }
 <div class="row justify-content-center">
@@ -13,7 +15,7 @@
                         </h6>
                     </div>
                     <div class="col text-end">
-                        <a class="btn btn-sm btn-primary" href="~/Product/CreatePhoto/123">
+                        <a class="btn btn-sm btn-primary" href="~/Product/Photo/@ViewBag.ProductID?method=add">
                             <i class="bi bi-plus-circle me-1"></i>
                             Thêm ảnh
                         </a>
@@ -33,24 +35,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 1; i <= 5; i++)
+                        @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="text-center">
-                                    <img src="~/images/products/demo.png"
-                                    class="img-thumbnail"
-                                    style="max-height:80px;" />
+                                <td class="text-center align-middle">
+                                    <img src="~/images/products/@(string.IsNullOrEmpty(item.Photo) ? "nophoto.png" : item.Photo)"
+                                         class="img-thumbnail"
+                                         style="max-height:80px;" />
                                 </td>
-                                <td>Ảnh mặt trước sản phẩm</td>
-                                <td class="text-center">@i</td>
-                                <td class="text-center">
-                                    <span class="badge bg-success">Hiện</span>
+                                <td class="align-middle">@item.Description</td>
+                                <td class="text-center align-middle">@item.DisplayOrder</td>
+                                <td class="text-center align-middle">
+                                    @if (!item.IsHidden)
+                                    {
+                                        <span class="badge bg-success">Hiện</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Ẩn</span>
+                                    }
                                 </td>
-                                <td class="text-center text-nowrap">
-                                    <a class="btn btn-sm btn-primary" href="~/Product/EditPhoto/123?photoId=456">
+                                <td class="text-center text-nowrap align-middle">
+                                    <a class="btn btn-sm btn-primary" href="~/Product/Photo/@item.ProductID?method=edit&photoId=@item.PhotoID">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a class="btn btn-sm btn-danger" href="~/Product/DeletePhoto/123?photoId=456">
+                                    <a class="btn btn-sm btn-danger" href="~/Product/Photo/@item.ProductID?method=delete&photoId=@item.PhotoID" onclick="return confirm('Xóa ảnh này của mặt hàng?')">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>
@@ -61,4 +70,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>

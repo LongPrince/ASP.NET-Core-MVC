@@ -1,4 +1,5 @@
-﻿@{
+@model SV22T1020659.Models.Catalog.ProductPhoto
+@{
 }
 @section PageToolBar {
     <button type="submit" form="formEdit" class="btn btn-primary">
@@ -6,7 +7,7 @@
         Lưu ảnh
     </button>
 
-    <a href="~/Product/Edit/123#photos" class="btn btn-secondary ms-1">
+    <a href="~/Product/Edit/@Model.ProductID#photos" class="btn btn-secondary ms-1">
         <i class="bi bi-arrow-left"></i>
         Quay lại
     </a>
@@ -19,17 +20,21 @@
             </div>
 
             <div class="card-body">
-                <form id="formEdit" method="post" enctype="multipart/form-data">
+                <form id="formEdit" method="post" enctype="multipart/form-data" action="~/Product/SavePhoto">
+                    <input type="hidden" asp-for="PhotoID" />
+                    <input type="hidden" asp-for="ProductID" />
+                    <input type="hidden" asp-for="Photo" />
 
                     <div class="row mb-3 align-items-center">
                         <label class="col-sm-3 fw-semibold">Ảnh</label>
                         <div class="col-sm-9">
                             <input type="file"
-                                   name="Photo"
+                                   name="uploadPhoto"
                                    class="form-control"
                                    accept="image/*"
                                    data-img-preview="imgPreview"
                                    onchange="previewImage(this)" />
+                            <span asp-validation-for="Photo" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -37,7 +42,7 @@
                         <label class="col-sm-3 fw-semibold">Xem trước</label>
                         <div class="col-sm-9">
                             <img id="imgPreview"
-                                 src="~/images/products/nophoto.png"
+                                 src="~/images/products/@(string.IsNullOrEmpty(Model.Photo) ? "nophoto.png" : Model.Photo)"
                                  class="img-thumbnail"
                                  style="max-height:200px;" />
                         </div>
@@ -46,8 +51,8 @@
                     <div class="row mb-3">
                         <label class="col-sm-3 fw-semibold">Mô tả</label>
                         <div class="col-sm-9">
-                            <input type="text" name="Description"
-                                      class="form-control" />
+                            <input type="text" asp-for="Description"
+                                   class="form-control" />
                         </div>
                     </div>
 
@@ -55,10 +60,10 @@
                         <label class="col-sm-3 fw-semibold">Thứ tự hiển thị</label>
                         <div class="col-sm-3">
                             <input type="number"
-                                   name="DisplayOrder"
+                                   asp-for="DisplayOrder"
                                    class="form-control"
-                                   value="1"
                                    min="1" />
+                            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -68,14 +73,14 @@
                             <div class="form-check">
                                 <input class="form-check-input"
                                        type="checkbox"
-                                       name="IsHidden"
+                                       asp-for="IsHidden"
                                        id="IsHidden" />
                                 <label class="form-check-label" for="IsHidden">
                                     Ẩn ảnh
                                 </label>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </form>
             </div>
         </div>

@@ -1,4 +1,6 @@
-﻿@{
+@using SV22T1020659.Models.Catalog
+@model IEnumerable<ProductAttribute>
+@{
     Layout = null;
 }
 <div class="row justify-content-center">
@@ -13,7 +15,7 @@
                         </h6>
                     </div>
                     <div class="col text-end">
-                        <a class="btn btn-sm btn-primary" href="~/Product/CreateAttribute/123">
+                        <a class="btn btn-sm btn-primary" href="~/Product/Attribute/@ViewBag.ProductID?method=add">
                             <i class="bi bi-plus"></i>
                             Thêm thuộc tính
                         </a>
@@ -32,17 +34,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @for (int i = 1; i <= 10; i++)
+                        @foreach (var item in Model)
                         {
                             <tr>
-                                <td>Màu sắc</td>
-                                <td>Đỏ</td>
-                                <td class="text-center">@i</td>
+                                <td>@item.AttributeName</td>
+                                <td>@item.AttributeValue</td>
+                                <td class="text-center">@item.DisplayOrder</td>
                                 <td class="text-center text-nowrap">
-                                    <a class="btn btn-sm btn-primary" href="~/Product/EditAttribute/123?attributeId=456">
+                                    <a class="btn btn-sm btn-primary" href="~/Product/Attribute/@item.ProductID?method=edit&attributeId=@item.AttributeID">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a class="btn btn-sm btn-danger" href="~/Product/DeleteAttribute/123?attributeId=456">
+                                    <a class="btn btn-sm btn-danger" href="~/Product/Attribute/@item.ProductID?method=delete&attributeId=@item.AttributeID" onclick="return confirm('Xóa thuộc tính này của mặt hàng?')">
                                         <i class="bi bi-trash"></i>
                                     </a>
                                 </td>

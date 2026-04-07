@@ -115,5 +115,6 @@
 
 @if (Model.ProductID > 0)
 {
-    @* (Hiển thị danh sách ảnh và thuộc tính ở đây sau) *@
+    @await Html.PartialAsync("ListPhotos", (IEnumerable<ProductPhoto>)ViewBag.Photos)
+    @await Html.PartialAsync("ListAttributes", (IEnumerable<ProductAttribute>)ViewBag.Attributes)
 }

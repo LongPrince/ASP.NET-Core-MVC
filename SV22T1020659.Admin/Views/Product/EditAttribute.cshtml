@@ -1,4 +1,5 @@
-﻿@{
+@model SV22T1020659.Models.Catalog.ProductAttribute
+@{
 }
 @section PageToolBar {
     <button type="submit" form="formEdit" class="btn btn-primary">
@@ -6,7 +7,7 @@
         Lưu thuộc tính
     </button>
 
-    <a href="~/Product/Edit/123#attributes" class="btn btn-secondary ms-1">
+    <a href="~/Product/Edit/@Model.ProductID#attributes" class="btn btn-secondary ms-1">
         <i class="bi bi-arrow-left"></i>
         Quay lại
     </a>
@@ -19,7 +20,9 @@
             </div>
 
             <div class="card-body">
-                <form id="formEdit" method="post">
+                <form id="formEdit" method="post" action="~/Product/SaveAttribute">
+                    <input type="hidden" asp-for="AttributeID" />
+                    <input type="hidden" asp-for="ProductID" />
 
                     <div class="row mb-3">
                         <label class="col-sm-3 fw-semibold">
@@ -27,10 +30,11 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text"
-                                   name="AttributeName"
+                                   asp-for="AttributeName"
                                    class="form-control"
                                    placeholder="Ví dụ: Màu sắc, Kích thước"
-                                   required autofocus />
+                                   autofocus />
+                            <span asp-validation-for="AttributeName" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -40,10 +44,10 @@
                         </label>
                         <div class="col-sm-9">
                             <input type="text"
-                                   name="AttributeValue"
+                                   asp-for="AttributeValue"
                                    class="form-control"
-                                   placeholder="Ví dụ: Đỏ, XL, 500g"
-                                   required />
+                                   placeholder="Ví dụ: Đỏ, XL, 500g" />
+                            <span asp-validation-for="AttributeValue" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -53,10 +57,10 @@
                         </label>
                         <div class="col-sm-3">
                             <input type="number"
-                                   name="DisplayOrder"
+                                   asp-for="DisplayOrder"
                                    class="form-control"
-                                   value="1"
                                    min="1" />
+                            <span asp-validation-for="DisplayOrder" class="text-danger"></span>
                         </div>
                     </div>
                 </form>
