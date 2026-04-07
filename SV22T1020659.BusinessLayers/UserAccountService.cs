@@ -2,6 +2,7 @@ using SV22T1020659.DataLayers.Interfaces;
 using SV22T1020659.DataLayers.SQLServer;
 using SV22T1020659.Models.Security;
 using System.Threading.Tasks;
+using SV22T1020659.Models.Partner;
 
 namespace SV22T1020659.BusinessLayers
 {
@@ -42,6 +43,19 @@ namespace SV22T1020659.BusinessLayers
                 return await employeeAccountDB.ChangePasswordAsync(userName, password);
             else
                 return await customerAccountDB.ChangePasswordAsync(userName, password);
+        }
+
+        /// <summary>
+        /// Đăng ký tài khoản khách hàng mới
+        /// </summary>
+        public static async Task<int> RegisterCustomerAsync(Customer data, string password)
+        {
+            var customerRepo = customerAccountDB as CustomerAccountRepository;
+            if (customerRepo != null)
+            {
+                return await customerRepo.RegisterCustomerAsync(data, password);
+            }
+            return 0;
         }
     }
 }

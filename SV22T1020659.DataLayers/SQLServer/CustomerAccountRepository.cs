@@ -1,7 +1,8 @@
-﻿using Dapper;
+using Dapper;
 using SV22T1020659.DataLayers.Interfaces;
 using SV22T1020659.Models.Security;
 using Microsoft.Data.SqlClient;
+using SV22T1020659.Models.Partner;
 
 namespace SV22T1020659.DataLayers.SQLServer
 {
@@ -40,6 +41,34 @@ namespace SV22T1020659.DataLayers.SQLServer
                 string sql = "UPDATE Customers SET Password = @password WHERE Email = @userName";
                 int rowsAffected = await connection.ExecuteAsync(sql, new { userName, password });
                 return rowsAffected > 0;
+            }
+        }
+
+        /// <summary>
+        /// Đăng ký tài khoản khách hàng mới
+        /// </summary>
+        public async Task<int> RegisterCustomerAsync(Customer data, string password)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                string sql = @"IF NOT EXISTS (SELECT * FROM Customers WHERE Email = @Email)
+                               BEGIN
+                                   INSERT INTO Customers(CustomerName, ContactName, Province, Address, Phone, Email, Password, IsLocked)
+                                   VALUES(@CustomerName, @ContactName, @Province, @Address, @Phone, @Email, @Password, 0);
+                                   SELECT CAST(SCOPE_IDENTITY() AS INT);
+                               END
+                               ELSE
+                                   SELECT -1;";
+                return await connection.ExecuteScalarAsync<int>(sql, new
+                {
+                    data.CustomerName,
+                    data.ContactName,
+                    data.Province,
+                    data.Address,
+                    data.Phone,
+                    data.Email,
+                    Password = password
+                });
             }
         }
     }

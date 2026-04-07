@@ -1,4 +1,4 @@
-﻿using SV22T1020659.Models.Security;
+using SV22T1020659.Models.Security;
 
 namespace SV22T1020659.DataLayers.Interfaces
 {

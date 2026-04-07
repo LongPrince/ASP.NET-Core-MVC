@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Đăng nhập";
     Layout = null;
 }
@@ -48,9 +48,12 @@
                                 <button type="submit" class="btn btn-primary">Đăng nhập</button>
                             </div>
                         </div>
-
+                        <div class="col-12 text-center mt-3">
+                            <p class="mb-0">
+                                <a href="~/Account/Register" class="text-center">Đăng ký tài khoản mới</a>
+                            </p>
+                        </div>
                     </div>
-
                 </form>
             </div>
 
@@ -61,6 +64,24 @@
     <script src="~/lib/popperjs/popper.min.js"></script>
     <script src="~/lib/bootstrap/bootstrap.bundle.min.js"></script>
     <script type="module" src="~/lib/adminlte/js/adminlte.js"></script>
+    
+    <!-- Thêm SweetAlert2 cho thông báo -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công!',
+                    text: '@Html.Raw(TempData["SuccessMessage"])',
+                    confirmButtonText: 'Đóng'
+                });
+                </text>
+            }
+        });
+    </script>
 
 </body>
 

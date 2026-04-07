@@ -1,0 +1,140 @@
+@model SV22T1020659.Models.HR.Employee
+@{
+    Layout = null;
+    ViewBag.Title = "Đăng ký tài khoản Admin";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TNP Shop | Đăng ký Admin</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/lib/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/lib/adminlte/css/adminlte.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        .register-box {
+            width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="register-box my-5">
+        <div class="text-center mb-4">
+            <h3 class="text-primary"><b>TNP</b> Shop</h3>
+            <p class="text-muted">Đăng ký tài khoản quản trị hệ thống</p>
+        </div>
+
+        <form action="~/Account/Register" method="post">
+            <div class="row">
+                <!-- Họ và tên -->
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Họ và tên nhân viên</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                        <input type="text" name="FullName" class="form-control" placeholder="Họ và tên" value="@Model?.FullName" required autofocus>
+                    </div>
+                </div>
+
+                <!-- Ngày sinh -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Ngày sinh</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                        <input type="text" name="BirthDate" class="form-control date-picker" placeholder="dd/mm/yyyy" value="@Model?.BirthDate?.ToString("dd/MM/yyyy")">
+                    </div>
+                </div>
+
+                <!-- Điện thoại -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Số điện thoại</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone-fill"></i></span>
+                        <input type="text" name="Phone" class="form-control" placeholder="Số điện thoại" value="@Model?.Phone">
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Email (Định danh đăng nhập)</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope-at-fill"></i></span>
+                        <input type="email" name="Email" class="form-control" placeholder="Email" value="@Model?.Email" required>
+                    </div>
+                </div>
+
+                <!-- Địa chỉ -->
+                <div class="col-md-12 mb-3">
+                    <label class="form-label fw-bold">Địa chỉ cư trú</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt-fill"></i></span>
+                        <input type="text" name="Address" class="form-control" placeholder="Địa chỉ" value="@Model?.Address">
+                    </div>
+                </div>
+
+                <!-- Mật khẩu -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Mật khẩu</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+                        <input type="password" name="Password" class="form-control" placeholder="Mật khẩu" required>
+                    </div>
+                </div>
+
+                <!-- Xác nhận mật khẩu -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Xác nhận</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-check-circle-fill"></i></span>
+                        <input type="password" name="confirmPassword" class="form-control" placeholder="Gõ lại mk" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-danger mb-3">
+                @Html.ValidationSummary("")
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-person-plus-fill"></i> Đăng ký tài khoản
+                </button>
+                <a href="~/Account/Login" class="btn btn-outline-secondary mt-2">
+                    Quay về Đăng nhập
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/lib/flatpickr/flatpickr.min.js"></script>
+    <script src="~/lib/flatpickr/l10n/vn.js"></script>
+    <script src="~/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            flatpickr(".date-picker", {
+                dateFormat: "d/m/Y",
+                locale: "vn",
+                allowInput: true
+            });
+        });
+    </script>
+</body>
+</html>
