@@ -71,7 +71,7 @@
                             <span class="text-muted fw-bold">@item.TotalPrice.ToString("N0")đ</span>
                         </li>
                     }
-                    <li class="list-group-item bg-transparent d-flex justify-content-between px-0 py-3 mt-2 border-top border-2 border-dark">
+                    <li class="list-group-item bg-transparent border-0 d-flex justify-content-between">
                         <span class="fw-bold fs-5">Tổng cộng (VND)</span>
                         <strong class="fs-5 text-primary">@Model.Sum(x => x.TotalPrice).ToString("N0")đ</strong>
                     </li>

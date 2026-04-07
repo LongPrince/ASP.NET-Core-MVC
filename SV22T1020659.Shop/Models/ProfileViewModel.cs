@@ -26,6 +26,8 @@ namespace SV22T1020659.Shop.Models
 
     public class ChangePasswordViewModel
     {
+        public int CustomerID { get; set; }
+
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu hiện tại")]
         [DataType(DataType.Password)]
         [Display(Name = "Mật khẩu hiện tại")]

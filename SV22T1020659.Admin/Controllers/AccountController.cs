@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using SV22T1020659.Models.Security;
 using SV22T1020659.Admin;
-using SV22T1020659.Models.Security;
 using SV22T1020659.BusinessLayers;
 
 namespace SV22T1020659.Admin.Controllers

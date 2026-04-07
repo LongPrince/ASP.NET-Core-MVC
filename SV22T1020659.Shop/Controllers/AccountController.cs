@@ -198,7 +198,13 @@ namespace SV22T1020659.Shop.Controllers
         [HttpGet]
         public IActionResult ChangePassword()
         {
-            return View();
+            var model = new ChangePasswordViewModel();
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (int.TryParse(userIdStr, out int userId))
+            {
+                model.CustomerID = userId;
+            }
+            return View(model);
         }
 
         [Microsoft.AspNetCore.Authorization.Authorize]
@@ -230,7 +236,7 @@ namespace SV22T1020659.Shop.Controllers
                 {
                     ViewBag.SuccessMessage = "Đổi mật khẩu thành công!";
                     ModelState.Clear();
-                    return View();
+                    return View(model);
                 }
             }
 
