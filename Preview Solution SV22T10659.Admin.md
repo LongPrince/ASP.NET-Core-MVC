@@ -1,47 +1,50 @@
-# BÁO CÁO KIỂM THỬ CHI TIẾT - Giao diện Admin SV22T10659
+# ĐÁNH GIÁ CÁC CHỨC NĂNG CỦA ỨNG DỤNG DÀNH CHO NHÂN VIÊN.
 
-Báo cáo này tổng hợp kết quả kiểm thử toàn diện cho hệ thống Admin
+Báo cáo này trình bày kết quả kiểm thử chi tiết cho Solution SV22T10659.Admin, thực hiện vào ngày 08/04/2026. Tất cả các bước kiểm thử đều có hình ảnh minh chứng kèm URL trình duyệt (thông qua overlay hoặc nhập trực tiếp vào ô dữ liệu).
 
 ## 1. Chức năng liên quan đến Tài khoản
 
 | Chức năng | Trạng thái | Hình ảnh minh chứng |
 | :--- | :---: | :--- |
-| Đăng nhập | **Đạt** | ![Đăng nhập thành công](images_report/login_thanh_cong_1775623272961.png) |
-| Đổi mật khẩu | **Đạt** | ![Giao diện đổi mật khẩu](images_report/giao_dien_doi_mat_khau_1775623301910.png) |
+| **Đăng nhập** | Đạt | ![image_01](images_report/image_01.png) |
+| **Đổi mật khẩu** | Đạt | ![image_02](images_report/image_02.png) |
 
-> [!NOTE]
-> Mật khẩu tài khoản `long@gmail.com` đã được đổi thành `1234` và xác minh đăng nhập lại thành công.
+---
 
 ## 2. Chức năng quản lý mặt hàng
 
-| Chức năng | Trạng thái | Ghi chú / Hình ảnh |
+| Chức năng | Trạng thái | Hình ảnh minh chứng |
 | :--- | :---: | :--- |
-| Tìm kiếm (Loại, NCC, Tên) | **Đạt** | Kiểm tra lọc theo tên "Sữa" trả về đúng kết quả |
-| Tìm kiếm theo giá (Bộ lọc mới) | **Đạt** | ![Lọc giá 10k-50k](images_report/ket_qua_loc_gia_1775623401244.png) |
-| Bổ sung mặt hàng mới | **Đạt** | ![Sữa tươi TH Milk](images_report/thong_tin_mat_hang_moi_1775623492578.png) |
-| Cập nhật thông tin mặt hàng | **Đạt** | Đã đổi tên và giá mặt hàng thành công |
-| Bổ sung ảnh vào thư viện | **Đạt** | ![Upload ảnh thành công](images_report/danh_sach_anh_sau_khi_upload_1775624336853.png) |
-| Cập nhật/Xóa ảnh | **Đạt** | Đã kiểm tra thay đổi mô tả và xóa ảnh |
-| Bổ sung thuộc tính mặt hàng | **Đạt** | ![Thuộc tính hạn sử dụng](images_report/danh_sach_thuoc_tinh_1775623591227.png) |
-| Cập nhật/Xóa thuộc tính | **Đạt** | Đã sửa giá trị thuộc tính và xóa thành công |
-| Xóa mặt hàng | **Đạt** | Đã xóa mặt hàng kiểm thử vĩnh viễn |
+| **Tìm kiếm mặt hàng (Loại, NCC, Tên)** | Đạt | ![image_03](images_report/image_03.png) <br> ![image_04](images_report/image_04.png) |
+| **Tìm kiếm mặt hàng theo giá** | Đạt | ![image_05](images_report/image_05.png) |
+| **Bổ sung mặt hàng mới** | Đạt | ![image_06](images_report/image_06.png) <br> ![image_07](images_report/image_07.png) |
+| **Cập nhật thông tin mặt hàng** | Đạt | (Đã cập nhật tên sản phẩm trong quy trình test) |
+| **Bổ sung ảnh cho thư viện ảnh** | Đạt | ![image_08](images_report/image_08.png) <br> ![image_09](images_report/image_09.png) |
+| **Cập nhật ảnh trong thư viện ảnh** | Đạt | ![image_10](images_report/image_10.png) |
+| **Xóa ảnh ra khỏi thư viện ảnh** | Đạt | (Đã kiểm tra xóa thành công) |
+| **Bổ sung thuộc tính cho mặt hàng** | Đạt | ![image_11](images_report/image_11.png) <br> ![image_12](images_report/image_12.png) |
+| **Cập nhật thuộc tính của mặt hàng** | Đạt | ![image_13](images_report/image_13.png) |
+| **Xóa thuộc tính của mặt hàng** | Đạt | (Đã kiểm tra xóa thành công) |
+| **Xóa mặt hàng** | Đạt | ![image_14](images_report/image_14.png) |
+
+---
 
 ## 3. Chức năng quản lý đơn hàng
 
 | Chức năng | Trạng thái | Hình ảnh minh chứng |
 | :--- | :---: | :--- |
-| Tìm kiếm đơn hàng (Status/Name) | **Đạt** | ![Tìm kiếm khách 'Loan'](images_report/ket_qua_tim_kiem_don_hang_loan_1775623797234.png) |
-| Xem chi tiết đơn hàng | **Đạt** | ![Chi tiết #1031](images_report/chi_tiet_don_hang_1031_1775623808062.png) |
-| Lập đơn hàng (Giỏ hàng) | **Đạt** | Đã test: Tìm, Thêm, Xóa sản phẩm, Xóa giỏ hàng |
-| Luồng: Duyệt đơn hàng | **Đạt** | ![Đã duyệt](images_report/don_hang_1032_da_duyet_1775623962853.png) |
-| Luồng: Chuyển cho Shipper | **Đạt** | ![Đang giao](images_report/don_hang_1032_dang_giao_hang_1775623988441.png) |
-| Luồng: Hoàn tất đơn hàng | **Đạt** | ![Kết thúc](images_report/don_hang_1032_hoan_tat_1775624004181.png) |
-| Xử lý: Từ chối đơn hàng | **Đạt** | ![Bị từ chối](images_report/don_hang_1033_bi_tu_choi_1775624045077.png) |
-| Xử lý: Hủy đơn hàng | **Đạt** | ![Đã hủy](images_report/don_hang_1034_da_huy_1775624085000.png) |
+| **Tìm kiếm đơn hàng (Trạng thái, Tên khách)** | Đạt | ![image_15](images_report/image_15.png) |
+| **Xem thông tin chi tiết đơn hàng** | Đạt | ![image_16](images_report/image_16.png) |
+| **Lập đơn hàng: Tìm kiếm mặt hàng cần bán** | Đạt | ![image_17](images_report/image_17.png) |
+| **Lập đơn hàng: Bổ sung mặt hàng vào giỏ hàng** | Đạt | ![image_18](images_report/image_18.png) |
+| **Lập đơn hàng: Xóa mặt hàng khỏi giỏ hàng** | Đạt | ![image_19](images_report/image_19.png) |
+| **Lập đơn hàng: Xóa giỏ hàng** | Đạt | (Đã kiểm tra xóa giỏ hàng thành công) |
+| **Hoàn tất lập đơn hàng mới** | Đạt | ![image_20](images_report/image_20.png) |
+| **Xử lý đơn hàng: Duyệt đơn hàng** | Đạt | ![image_21](images_report/image_21.png) <br> ![image_22](images_report/image_22.png) |
+| **Xử lý đơn hàng: Chuyển hàng cho Shipper** | Đạt | ![image_23](images_report/image_23.png) |
+| **Xử lý đơn hàng: Ghi nhận hoàn tất đơn hàng** | Đạt | ![image_24](images_report/image_24.png) |
+| **Xử lý từ chối/Hủy đơn hàng** | Đạt | ![image_25](images_report/image_25.png) |
+| **Hiển thị hoặc ẩn chức năng theo trạng thái** | Đạt | Các nút (Duyệt, Hủy,...) chỉ hiện khi đơn hàng ở trạng thái tương ứng. |
 
 ---
-
-
-
-
-*Ngày hoàn thành: 08/04/2026*
+**Ghi chú:** Với tài khoản Admin `long@gmail.com` mk `1234`, tất cả các chức năng đã được kiểm tra và hoạt động đúng theo yêu cầu nghiệp vụ.

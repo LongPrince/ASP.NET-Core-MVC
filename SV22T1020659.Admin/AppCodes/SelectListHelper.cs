@@ -16,7 +16,10 @@ namespace SV22T1020659.Admin
         /// <returns></returns>
         public static async Task<List<SelectListItem>> ProvincesAsync()
         {
-            var list = new List<SelectListItem>();
+            var list = new List<SelectListItem>()
+            {
+                new SelectListItem() { Value = "", Text = "-- Tỉnh/Thành phố --"}
+            };
             var result = await DictionaryDataService.ListProvincesAsync();
             foreach (var item in result)
             {
@@ -35,7 +38,10 @@ namespace SV22T1020659.Admin
         /// <returns></returns>
         public static async Task<List<SelectListItem>> Categories()
         {
-            var list = new List<SelectListItem>();
+            var list = new List<SelectListItem>()
+            {
+                new SelectListItem() { Value = "0", Text = "-- Loại hàng --"}
+            };
             var input = new PaginationSearchInput() { Page = 1, PageSize = 1000, SearchValue = "" };
             var result = await CatalogDataService.ListCategoriesAsync(input);
             foreach (var item in result.DataItems)
@@ -55,7 +61,10 @@ namespace SV22T1020659.Admin
         /// <returns></returns>
         public static async Task<List<SelectListItem>> Suppliers()
         {
-            var list = new List<SelectListItem>();
+            var list = new List<SelectListItem>()
+            {
+                new SelectListItem() { Value = "0", Text = "-- Nhà cung cấp --"}
+            };
             var input = new PaginationSearchInput() { Page = 1, PageSize = 1000, SearchValue = "" };
             var result = await PartnerDataService.ListSuppliersAsync(input);
             foreach (var item in result.DataItems)
@@ -75,7 +84,10 @@ namespace SV22T1020659.Admin
         /// <returns></returns>
         public static async Task<List<SelectListItem>> Shippers()
         {
-            var list = new List<SelectListItem>();
+            var list = new List<SelectListItem>()
+            {
+                new SelectListItem() { Value = "0", Text = "-- Người giao hàng --"}
+            };
             var input = new PaginationSearchInput() { Page = 1, PageSize = 1000, SearchValue = "" };
             var result = await PartnerDataService.ListShippersAsync(input);
             foreach (var item in result.DataItems)
@@ -95,7 +107,10 @@ namespace SV22T1020659.Admin
         /// <returns></returns>
         public static async Task<List<SelectListItem>> Customers()
         {
-            var list = new List<SelectListItem>();
+            var list = new List<SelectListItem>()
+            {
+                new SelectListItem() { Value = "0", Text = "-- Khách hàng --"}
+            };
             var input = new PaginationSearchInput() { Page = 1, PageSize = 1000, SearchValue = "" };
             var result = await PartnerDataService.ListCustomersAsync(input);
             foreach (var item in result.DataItems)
