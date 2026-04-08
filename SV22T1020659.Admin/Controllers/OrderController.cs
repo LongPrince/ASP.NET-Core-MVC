@@ -401,13 +401,25 @@ namespace SV22T1020659.Admin.Controllers
         }
 
         /// <summary>
-        /// Làm trống toàn bộ giỏ hàng
+        /// Hiển thị giao diện xác nhận xóa toàn bộ giỏ hàng
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         public IActionResult ClearCart()
         {
+            return View();
+        }
+
+        /// <summary>
+        /// Làm trống toàn bộ giỏ hàng (Xử lý POST qua AJAX)
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ActionName("ClearCart")]
+        public IActionResult ClearCart_Confirmed()
+        {
             ApplicationContext.SetSessionData(SHOPPING_CART, new List<OrderDetailViewInfo>());
-            return RedirectToAction("ShowCart");
+            return Json(new ApiResult(1, "Đã xóa sạch giỏ hàng"));
         }
 
         /// <summary>
