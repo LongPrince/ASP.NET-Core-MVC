@@ -89,14 +89,23 @@ namespace SV22T1020659.DataLayers.SQLServer
                                  AND (@dateFrom IS NULL OR o.OrderTime >= @dateFrom)
                                  AND (@dateTo IS NULL OR o.OrderTime <= @dateTo)
                                  AND (@customerID = 0 OR o.CustomerID = @customerID)
-                               ORDER BY o.OrderID DESC
-                               OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
-                               
-                               SELECT COUNT(*) FROM Orders o
-                               WHERE (@status = 0 OR o.Status = @status)
-                                 AND (@dateFrom IS NULL OR o.OrderTime >= @dateFrom)
-                                 AND (@dateTo IS NULL OR o.OrderTime <= @dateTo)
-                                 AND (@customerID = 0 OR o.CustomerID = @customerID);";
+                                 AND (@searchValue = N'' OR 
+                                      c.CustomerName LIKE @searchValue OR 
+                                      s.ShipperName LIKE @searchValue)
+                                ORDER BY o.OrderID DESC
+                                OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+                                
+                                SELECT COUNT(*) FROM Orders o
+                                LEFT JOIN Employees e ON o.EmployeeID = e.EmployeeID
+                                LEFT JOIN Customers c ON o.CustomerID = c.CustomerID
+                                LEFT JOIN Shippers s ON o.ShipperID = s.ShipperID
+                                WHERE (@status = 0 OR o.Status = @status)
+                                  AND (@dateFrom IS NULL OR o.OrderTime >= @dateFrom)
+                                  AND (@dateTo IS NULL OR o.OrderTime <= @dateTo)
+                                  AND (@customerID = 0 OR o.CustomerID = @customerID)
+                                  AND (@searchValue = N'' OR 
+                                       c.CustomerName LIKE @searchValue OR 
+                                       s.ShipperName LIKE @searchValue);";
 
                 var parameters = new
                 {
@@ -104,6 +113,7 @@ namespace SV22T1020659.DataLayers.SQLServer
                     dateFrom = input.DateFrom,
                     dateTo = input.DateTo,
                     customerID = input.CustomerID,
+                    searchValue = string.IsNullOrEmpty(input.SearchValue) ? "" : $"%{input.SearchValue}%",
                     offset = (input.Page - 1) * input.PageSize,
                     pageSize = input.PageSize
                 };

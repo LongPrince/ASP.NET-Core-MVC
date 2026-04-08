@@ -35,7 +35,15 @@
                             onchange="paginationSearch(event, document.getElementById('formSearch'), 1)">
                     </select>
                 </div>
-                <div class="col-sm-6 mb-2">
+                <div class="col-sm-2 mb-2">
+                    <input type="number" asp-for="MinPrice" class="form-control" placeholder="Giá thấp nhất..." 
+                           onchange="paginationSearch(event, document.getElementById('formSearch'), 1)"/>
+                </div>
+                <div class="col-sm-2 mb-2">
+                    <input type="number" asp-for="MaxPrice" class="form-control" placeholder="Giá cao nhất..." 
+                           onchange="paginationSearch(event, document.getElementById('formSearch'), 1)"/>
+                </div>
+                <div class="col-sm-2 mb-2">
                     <div class="input-group">
                         <input type="text" asp-for="SearchValue"
                                class="form-control"
