@@ -63,7 +63,8 @@
             $(document).on("click", ".open-modal", function (e) {
                 e.preventDefault();
                 var url = $(this).attr("href");
-                $.get(url, function (data) {
+                var separator = url.includes("?") ? "&" : "?";
+                $.get(url + separator + "isPartial=true", function (data) {
                     $("#dialogModalContent").html(data); // Nạp vào modal-content
                     $("#dialogModal").modal("show");
                 });
@@ -98,7 +99,7 @@
         }
 
         function showCart() {
-            $.get("/Order/ShowCart", function (html) {
+            $.get("/Order/ShowCart?isPartial=true", function (html) {
                 $("#showCart").html(html);
             });
         }

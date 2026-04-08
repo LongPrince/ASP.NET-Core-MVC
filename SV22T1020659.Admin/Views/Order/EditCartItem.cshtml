@@ -1,76 +1,75 @@
 @model SV22T1020659.Models.Sales.OrderDetailViewInfo
 @{
-    Layout = null;
+    bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+    Layout = isAjax ? null : "_Layout";
 }
-<div class="modal-header text-bg-primary">
-    <strong class="modal-title">
-        Cập nhật mặt hàng trong giỏ hàng
-    </strong>
-    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-</div>
 
-<div class="modal-body">
-    <form id="formEditCartItem" action="~/Order/UpdateCartItem" method="post" class="container-fluid">
-        <input type="hidden" name="OrderID" value="@Model.OrderID" />
-        <input type="hidden" name="ProductID" value="@Model.ProductID" />
-
-        <div class="row">
-            <div class="col-md-8">
-                <div class="row mb-3 align-items-center">
-                    <label class="col-sm-4 col-form-label fw-semibold">
-                        Mặt hàng
-                    </label>
-                    <div class="col-sm-8">
-                        <input type="text"
-                               class="form-control-plaintext fw-bold"
-                               value="@Model.ProductName"
-                               readonly>
-                    </div>
-                </div>
-                <div class="row mb-3 align-items-center">
-                    <label class="col-sm-4 col-form-label fw-semibold">
-                        Số lượng
-                    </label>
-                    <div class="col-sm-5">
-                        <input type="number"
-                               name="Quantity"
-                               class="form-control text-end"
-                               min="1"
-                               value="@Model.Quantity">
-                    </div>
-                </div>
-                <div class="row mb-3 align-items-center">
-                    <label class="col-sm-4 col-form-label fw-semibold">
-                        Đơn giá
-                    </label>
-                    <div class="col-sm-5">
-                        <input type="text"
-                               name="SalePrice"
-                               class="form-control text-end bg-light"
-                               value="@Model.SalePrice.ToString("N0")"
-                               readonly>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 text-end">                
-                <img src="@(string.IsNullOrEmpty(Model.Photo) ? "/images/products/nophoto.png" : "/images/products/" + Model.Photo)"
-                     alt="@Model.ProductName"
-                     class="img-thumbnail"
-                     style="max-height:180px">
-            </div>
+<div class="@(isAjax ? "" : "container mt-4")">
+    <div class="@(isAjax ? "" : "card card-outline card-primary shadow-sm mx-auto")" style="@(isAjax ? "" : "max-width: 700px;")">
+        <div class="@(isAjax ? "modal-header text-bg-primary" : "card-header bg-primary text-white")">
+            <h5 class="@(isAjax ? "modal-title font-weight-bold" : "card-title mb-0")">
+                <i class="bi bi-pencil-square me-2"></i> Cập nhật mặt hàng
+            </h5>
+            @if (isAjax)
+            {
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            }
         </div>
 
-        <div class="modal-footer px-0 pb-0">
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-save"></i> Cập nhật
-            </button>
-            <button type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
-                Đóng
-            </button>
+        <div class="@(isAjax ? "modal-body" : "card-body")">
+            <form id="formEditCartItem" action="~/Order/UpdateCartItem" method="post" class="container-fluid">
+                <input type="hidden" name="OrderID" value="@Model.OrderID" />
+                <input type="hidden" name="ProductID" value="@Model.ProductID" />
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row mb-3 align-items-center">
+                            <label class="col-sm-4 col-form-label fw-semibold text-muted">Mặt hàng</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control-plaintext fw-bold text-primary" value="@Model.ProductName" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <label class="col-sm-4 col-form-label fw-semibold">Số lượng</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="number" name="Quantity" class="form-control text-center" min="1" value="@Model.Quantity">
+                                    <span class="input-group-text">@Model.Unit</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3 align-items-center">
+                            <label class="col-sm-4 col-form-label fw-semibold">Đơn giá</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" name="SalePrice" class="form-control text-end bg-light" value="@Model.SalePrice.ToString("N0")" readonly>
+                                    <span class="input-group-text">VND</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center">
+                        <img src="@(string.IsNullOrEmpty(Model.Photo) ? "/images/products/nophoto.png" : "/images/products/" + Model.Photo)"
+                             alt="@Model.ProductName" class="img-thumbnail shadow-sm" style="max-height:160px; object-fit: contain;">
+                    </div>
+                </div>
+
+                <div class="@(isAjax ? "modal-footer px-0 pb-0 pt-3 border-top mt-3" : "text-end mt-4 pt-3 border-top")">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Cập nhật ngay
+                    </button>
+                    @if (isAjax)
+                    {
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    }
+                    else
+                    {
+                        <a href="javascript:history.back()" class="btn btn-secondary">Quay lại</a>
+                    }
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
 <script>

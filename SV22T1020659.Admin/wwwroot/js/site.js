@@ -1,4 +1,4 @@
-﻿// Hiển thị ảnh được chọn từ input file lên thẻ img
+// Hiển thị ảnh được chọn từ input file lên thẻ img
 // (Thẻ input có thuộc tính data-img-preview trỏ đến id của thẻ img dung để hiển thị ảnh)
 function previewImage(input) {
     if (!input.files || !input.files[0]) return;
@@ -83,6 +83,8 @@ function paginationSearch(event, form, page) {
         if (event) event.preventDefault();
 
         const url = link.getAttribute("href");
+        const separator = url.includes("?") ? "&" : "?";
+        const ajaxUrl = url + separator + "isPartial=true";
 
         // Hiển thị loading
         modalContent.innerHTML = `
@@ -102,7 +104,7 @@ function paginationSearch(event, form, page) {
         modal.show();
 
         // Load nội dung
-        fetch(url)
+        fetch(ajaxUrl)
             .then(res => res.text())
             .then(html => {
                 modalContent.innerHTML = html;

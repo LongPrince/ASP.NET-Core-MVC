@@ -1,30 +1,35 @@
 @using SV22T1020659.Models.Partner
 @{
-    Layout = null; // Thường dùng Modal
+    Layout = null; // Chặn ở Controller rồi nên file này mặc định là Partial
 }
 
-<div class="modal-dialog">
-    <div class="modal-content">
-        <form action="~/Order/Shipping/@ViewBag.OrderID" method="post" class="form-horizontal">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Chuyển sang giao hàng</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Chọn người giao hàng:</label>
-                    <select class="form-select" name="shipperID" required>
-                        @foreach (var shipper in await SelectListHelper.Shippers())
-                        {
-                            <option value="@shipper.Value">@shipper.Text</option>
-                        }
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Xác nhận chuyển giao</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-            </div>
-        </form>
+<form action="~/Order/Shipping/@ViewBag.OrderID" method="post" class="form-horizontal">
+    <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title font-weight-bold">
+            <i class="bi bi-truck me-2"></i> Chuyển sang giao hàng
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
-</div>
+    
+    <div class="modal-body py-3">
+        <div class="mb-3">
+            <label class="form-label fw-bold">Chọn người giao hàng:</label>
+            <select class="form-select select2" name="shipperID" required>
+                @foreach (var shipper in await SelectListHelper.Shippers())
+                {
+                    <option value="@shipper.Value">@shipper.Text</option>
+                }
+            </select>
+            <div class="form-text mt-2 text-muted small">
+                <i class="bi bi-info-circle me-1"></i> Vui lòng chọn một đơn vị vận chuyển bên trên để thực hiện giao hàng.
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary px-4">
+            <i class="bi bi-check-lg me-1"></i> Xác nhận chuyển giao
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    </div>
+</form>

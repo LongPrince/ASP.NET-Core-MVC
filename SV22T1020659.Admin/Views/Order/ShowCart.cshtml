@@ -1,6 +1,7 @@
 @model IEnumerable<SV22T1020659.Models.Sales.OrderDetailViewInfo>
 @{
-    Layout = null;
+    bool isAjax = Context.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+    Layout = isAjax ? null : "_Layout";
     decimal totalAmount = 0;
 }
 
@@ -100,7 +101,6 @@
                         <label class="col-md-3 col-form-label">Khách hàng</label>
                         <div class="col-md-9">
                             <select class="form-select select2" name="customerID" required>
-                                <option value="">-- Chọn khách hàng --</option>
                                 @foreach (var customer in await SelectListHelper.Customers())
                                 {
                                     <option value="@customer.Value">@customer.Text</option>
@@ -113,7 +113,6 @@
                         <label class="col-md-3 col-form-label">Tỉnh/thành giao hàng</label>
                         <div class="col-md-9">
                             <select class="form-select select2" name="deliveryProvince" required>
-                                <option value="">-- Chọn Tỉnh/thành --</option>
                                 @foreach (var province in await SelectListHelper.ProvincesAsync())
                                 {
                                     <option value="@province.Value">@province.Text</option>

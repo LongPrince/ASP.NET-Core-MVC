@@ -31,7 +31,7 @@
             }
             @if (Model.Status == OrderStatusEnum.Accepted)
             {
-                <a href="~/Order/Shipping/@Model.OrderID" class="btn btn-sm btn-info" onclick="openModal(event, this)">
+                <a href="~/Order/Shipping/@Model.OrderID" class="btn btn-sm btn-info open-modal">
                     <i class="bi bi-truck"></i> Chuyển sang giao hàng
                 </a>
             }
@@ -118,7 +118,7 @@
                             <td class="text-center text-nowrap">
                                 @if (Model.Status == OrderStatusEnum.New)
                                 {
-                                    <a href="~/Order/EditCartItem/@Model.OrderID?productID=@item.ProductID" class="btn btn-xs btn-primary btn-modal" onclick="openModal(event, this)">
+                                    <a href="~/Order/EditCartItem/@Model.OrderID?productID=@item.ProductID" class="btn btn-xs btn-primary open-modal" title="Cập nhật">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <a href="~/Order/DeleteDetail/@Model.OrderID/@item.ProductID" class="btn btn-xs btn-danger ms-1" onclick="return confirm('Xác nhận xóa mặt hàng này khỏi đơn hàng?')" title="Xóa mặt hàng">

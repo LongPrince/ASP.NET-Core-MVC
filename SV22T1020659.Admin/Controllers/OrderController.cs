@@ -83,7 +83,16 @@ namespace SV22T1020659.Admin.Controllers
         public async Task<IActionResult> Accept(int id)
         {
             var userData = User.GetUserData();
-            await SalesDataService.AcceptOrderAsync(id, int.Parse(userData.UserId));
+            if (userData == null || string.IsNullOrEmpty(userData.UserId))
+            {
+                TempData["Message"] = "Bạn cần đăng nhập để thực hiện thao tác này.";
+                return RedirectToAction("Detail", new { id });
+            }
+
+            bool result = await SalesDataService.AcceptOrderAsync(id, int.Parse(userData.UserId));
+            if (!result)
+                TempData["Message"] = "Duyệt đơn hàng không thành công (có thể trạng thái đơn hàng không hợp lệ).";
+
             return RedirectToAction("Detail", new { id });
         }
 
@@ -95,7 +104,16 @@ namespace SV22T1020659.Admin.Controllers
         public async Task<IActionResult> Reject(int id)
         {
             var userData = User.GetUserData();
-            await SalesDataService.RejectOrderAsync(id, int.Parse(userData.UserId));
+            if (userData == null || string.IsNullOrEmpty(userData.UserId))
+            {
+                TempData["Message"] = "Bạn cần đăng nhập để thực hiện thao tác này.";
+                return RedirectToAction("Detail", new { id });
+            }
+
+            bool result = await SalesDataService.RejectOrderAsync(id, int.Parse(userData.UserId));
+            if (!result)
+                TempData["Message"] = "Từ chối đơn hàng không thành công.";
+
             return RedirectToAction("Detail", new { id });
         }
 
@@ -127,8 +145,15 @@ namespace SV22T1020659.Admin.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Shipping(int id)
+        public async Task<IActionResult> Shipping(int id, bool isPartial = false)
         {
+            // Nếu không phải là yêu cầu Partial, chuyển hướng về trang Detail
+            if (!isPartial)
+                return RedirectToAction("Detail", new { id });
+
+            var order = await SalesDataService.GetOrderAsync(id);
+            if (order == null) return Json(new ApiResult(0, "Đơn hàng không tồn tại"));
+
             ViewBag.OrderID = id;
             return View();
         }
@@ -279,8 +304,12 @@ namespace SV22T1020659.Admin.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public IActionResult DeleteCartItem(int id)
+        public IActionResult DeleteCartItem(int id, bool isPartial = false)
         {
+            // Nếu không phải là yêu cầu Partial, chuyển hướng về trang Create
+            if (!isPartial)
+                return RedirectToAction("Create");
+
             var cart = GetCart();
             var item = cart.FirstOrDefault(m => m.ProductID == id);
             return View(item);
@@ -328,8 +357,15 @@ namespace SV22T1020659.Admin.Controllers
         /// <param name="productID">Mã mặt hàng</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> EditCartItem(int id = 0, int productID = 0)
+        public async Task<IActionResult> EditCartItem(int id = 0, int productID = 0, bool isPartial = false)
         {
+            // Nếu không phải là yêu cầu Partial, chuyển hướng về trang tương ứng
+            if (!isPartial)
+            {
+                if (id > 0) return RedirectToAction("Detail", new { id });
+                return RedirectToAction("Create");
+            }
+
             if (id == 0) // Xử lý trên giỏ hàng
             {
                 var cart = GetCart();
@@ -426,8 +462,12 @@ namespace SV22T1020659.Admin.Controllers
         /// Trả về partial hiển thị giỏ hàng hiện tại (Sử dụng cho AJAX)
         /// </summary>
         /// <returns></returns>
-        public IActionResult ShowCart()
+        public IActionResult ShowCart(bool isPartial = false)
         {
+            // Nếu không phải là yêu cầu Partial, chuyển hướng về trang Create
+            if (!isPartial)
+                return RedirectToAction("Create");
+
             var cart = GetCart();
             return View(cart);
         }
@@ -449,12 +489,16 @@ namespace SV22T1020659.Admin.Controllers
             if (customerID <= 0 || string.IsNullOrEmpty(deliveryProvince) || string.IsNullOrEmpty(deliveryAddress))
                 return Json("Vui lòng nhập đầy đủ thông tin khách hàng và nơi nhận hàng");
 
+            var userData = User.GetUserData();
+            if (userData == null || string.IsNullOrEmpty(userData.UserId))
+                return Json("Vui lòng đăng nhập lại để lập đơn hàng");
+
             int orderID = await SalesDataService.AddOrderAsync(new Order()
             {
                 CustomerID = customerID,
                 DeliveryProvince = deliveryProvince,
                 DeliveryAddress = deliveryAddress,
-                EmployeeID = int.Parse(User.GetUserData().UserId)
+                EmployeeID = int.Parse(userData.UserId)
             });
 
             if (orderID > 0)
