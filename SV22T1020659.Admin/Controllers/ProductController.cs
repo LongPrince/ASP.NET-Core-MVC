@@ -34,8 +34,11 @@ namespace SV22T1020659.Admin.Controllers
             return View(input);
         }
 
-        public async Task<IActionResult> Search(ProductSearchInput input)
+        public async Task<IActionResult> Search(ProductSearchInput input, string minPriceValue = "", string maxPriceValue = "")
         {
+            input.MinPrice = ToDecimal(minPriceValue);
+            input.MaxPrice = ToDecimal(maxPriceValue);
+
             var result = await CatalogDataService.ListProductsAsync(input);
             ApplicationContext.SetSessionData(Product_search, input);
             return View(result);
@@ -80,8 +83,9 @@ namespace SV22T1020659.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveData(Product data, IFormFile? uploadPhoto)
+        public async Task<IActionResult> SaveData(Product data, string priceValue, IFormFile? uploadPhoto)
         {
+            data.Price = ToDecimal(priceValue);
             ViewBag.Title = data.ProductID == 0 ? "Bổ sung mặt hàng" : "Cập nhật mặt hàng";
 
             if (string.IsNullOrWhiteSpace(data.ProductName))
@@ -116,6 +120,23 @@ namespace SV22T1020659.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        private decimal ToDecimal(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s)) return 0;
+            
+            // Chỉ giữ lại các ký tự là số (loại bỏ mọi dấu phân cách và ký tự lạ)
+            string cleaned = "";
+            foreach (char c in s)
+            {
+                if (char.IsDigit(c))
+                    cleaned += c;
+            }
+
+            if (decimal.TryParse(cleaned, out decimal val))
+                return val;
+            return 0;
+        }
+
         // --- Thuộc tính (Attributes) ---
         public async Task<IActionResult> ListAttributes(int id)
         {
@@ -128,11 +149,15 @@ namespace SV22T1020659.Admin.Controllers
             switch (method)
             {
                 case "add":
+                    var attributes = await CatalogDataService.ListAttributesAsync(id);
+                    int maxOrder = attributes.Count > 0 ? attributes.Max(a => a.DisplayOrder) : 0;
+
                     ViewBag.Title = "Bổ sung thuộc tính cho mặt hàng";
                     var modelAdd = new ProductAttribute()
                     {
                         ProductID = id,
-                        AttributeID = 0
+                        AttributeID = 0,
+                        DisplayOrder = maxOrder + 1
                     };
                     return View("EditAttribute", modelAdd);
                 case "edit":
@@ -185,11 +210,15 @@ namespace SV22T1020659.Admin.Controllers
             switch (method)
             {
                 case "add":
+                    var photos = await CatalogDataService.ListPhotosAsync(id);
+                    int maxOrder = photos.Count > 0 ? photos.Max(p => p.DisplayOrder) : 0;
+
                     ViewBag.Title = "Bổ sung ảnh cho mặt hàng";
                     var modelAdd = new ProductPhoto()
                     {
                         ProductID = id,
-                        PhotoID = 0
+                        PhotoID = 0,
+                        DisplayOrder = maxOrder + 1
                     };
                     return View("EditPhoto", modelAdd);
                 case "edit":

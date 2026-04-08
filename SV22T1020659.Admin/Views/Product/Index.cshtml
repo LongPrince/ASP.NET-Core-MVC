@@ -36,11 +36,13 @@
                     </select>
                 </div>
                 <div class="col-sm-2 mb-2">
-                    <input type="number" asp-for="MinPrice" class="form-control" placeholder="Giá thấp nhất..." 
+                    <input type="text" name="minPriceValue" value="@(Model.MinPrice > 0 ? Model.MinPrice.ToString("G29") : "")" 
+                           class="form-control money-input" placeholder="Giá thấp nhất..." 
                            onchange="paginationSearch(event, document.getElementById('formSearch'), 1)"/>
                 </div>
                 <div class="col-sm-2 mb-2">
-                    <input type="number" asp-for="MaxPrice" class="form-control" placeholder="Giá cao nhất..." 
+                    <input type="text" name="maxPriceValue" value="@(Model.MaxPrice > 0 ? Model.MaxPrice.ToString("G29") : "")" 
+                           class="form-control money-input" placeholder="Giá cao nhất..." 
                            onchange="paginationSearch(event, document.getElementById('formSearch'), 1)"/>
                 </div>
                 <div class="col-sm-2 mb-2">

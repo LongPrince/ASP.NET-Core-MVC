@@ -60,14 +60,17 @@
                 locale: "vn",
                 allowInput: false
             });
-            document.querySelectorAll(".money-input").forEach(element => {
-                new AutoNumeric(element, {
-                    digitGroupSeparator: '.',
-                    decimalCharacter: ',',
+            if (typeof AutoNumeric !== 'undefined') {
+                AutoNumeric.multiple(".money-input", {
+                    digitGroupSeparator: ',',
+                    decimalCharacter: '.',
                     decimalPlaces: 0,
-                    unformatOnSubmit: true
+                    minimumValue: '0',
+                    historySize: 0,
+                    allowDecimalPadding: false,
+                    wheelStep: 0
                 });
-            });
+            }
             document.addEventListener("click", function (e) {
                 const target = e.target.closest(".open-modal");
                 if (target) {

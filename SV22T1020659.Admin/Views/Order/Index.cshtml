@@ -25,17 +25,27 @@
                 </div>
 
                 <div class="col-sm-2 mb-2">
+                    <label class="form-label">Khách hàng:</label>
+                    <select class="form-select" asp-for="CustomerID" 
+                            asp-items="await SelectListHelper.Customers()"
+                            onchange="paginationSearch(event, document.getElementById('formSearch'), 1)">
+                    </select>
+                </div>
+
+                <div class="col-sm-2 mb-2">
                     <label class="form-label">Từ ngày:</label>
-                    <input type="text" asp-for="DateFrom" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                    <input type="text" name="dateFrom" value="@Model.DateFrom?.ToString("dd/MM/yyyy")" 
+                           class="form-control date-picker" placeholder="dd/mm/yyyy" />
                 </div>
 
                 <div class="col-sm-2 mb-2">
                     <label class="form-label">Đến ngày:</label>
-                    <input type="text" asp-for="DateTo" class="form-control date-picker" placeholder="dd/mm/yyyy" />
+                    <input type="text" name="dateTo" value="@Model.DateTo?.ToString("dd/MM/yyyy")" 
+                           class="form-control date-picker" placeholder="dd/mm/yyyy" />
                 </div>
 
-                <div class="col-sm-6 mb-2">
-                    <label class="form-label">Tìm theo tên khách hàng hoặc người giao hàng:</label>
+                <div class="col-sm-4 mb-2">
+                    <label class="form-label">Tìm theo tên khách hàng, người giao hàng, nhân viên:</label>
                     <div class="input-group">
                         <input type="text" asp-for="SearchValue" class="form-control" placeholder="Tìm kiếm đơn hàng..." autofocus />
                         <button type="submit" class="btn btn-info">

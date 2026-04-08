@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using SV22T1020659.DataLayers.Interfaces;
 using SV22T1020659.Models.Catalog;
 using SV22T1020659.Models.Common;
@@ -40,9 +40,28 @@ namespace SV22T1020659.DataLayers.SQLServer
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                string sql = "DELETE FROM Products WHERE ProductID = @productID";
-                int rowsAffected = await connection.ExecuteAsync(sql, new { productID });
-                return rowsAffected > 0;
+                await connection.OpenAsync();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Xóa các thuộc tính của mặt hàng
+                        await connection.ExecuteAsync("DELETE FROM ProductAttributes WHERE ProductID = @productID", new { productID }, transaction);
+                        // Xóa các ảnh của mặt hàng
+                        await connection.ExecuteAsync("DELETE FROM ProductPhotos WHERE ProductID = @productID", new { productID }, transaction);
+                        // Xóa mặt hàng
+                        string sql = "DELETE FROM Products WHERE ProductID = @productID";
+                        int rowsAffected = await connection.ExecuteAsync(sql, new { productID }, transaction);
+
+                        transaction.Commit();
+                        return rowsAffected > 0;
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
             }
         }
 

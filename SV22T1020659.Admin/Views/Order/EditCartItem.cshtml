@@ -42,7 +42,8 @@
                             <label class="col-sm-4 col-form-label fw-semibold">Đơn giá</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
-                                    <input type="text" name="SalePrice" class="form-control text-end bg-light" value="@Model.SalePrice.ToString("N0")" readonly>
+                                    <input type="hidden" name="SalePrice" value="@Model.SalePrice" />
+                                    <input type="text" class="form-control text-end bg-light" value="@Model.SalePrice.ToString("N0")" readonly>
                                     <span class="input-group-text">VND</span>
                                 </div>
                             </div>

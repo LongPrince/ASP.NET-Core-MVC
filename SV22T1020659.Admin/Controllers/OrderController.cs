@@ -51,8 +51,19 @@ namespace SV22T1020659.Admin.Controllers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<IActionResult> Search(OrderSearchInput input)
+        public async Task<IActionResult> Search(OrderSearchInput input, string dateFrom = "", string dateTo = "")
         {
+            if (!string.IsNullOrWhiteSpace(dateFrom))
+            {
+                if (DateTime.TryParseExact(dateFrom, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime d))
+                    input.DateFrom = d;
+            }
+            if (!string.IsNullOrWhiteSpace(dateTo))
+            {
+                if (DateTime.TryParseExact(dateTo, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out DateTime d))
+                    input.DateTo = d;
+            }
+
             var result = await SalesDataService.ListOrdersAsync(input);
             ApplicationContext.SetSessionData(Order_search, input);
             return View(result);
@@ -233,7 +244,7 @@ namespace SV22T1020659.Admin.Controllers
         /// <param name="searchValue"></param>
         /// <param name="page"></param>
         /// <returns></returns>
-        public async Task<IActionResult> SearchProduct(string searchValue = "", int page = 1)
+        public async Task<IActionResult> SearchProduct(string searchValue = "", int categoryID = 0, int supplierID = 0, int page = 1)
         {
             int pageSize = 5;
             var input = new ProductSearchInput()
@@ -241,8 +252,8 @@ namespace SV22T1020659.Admin.Controllers
                 Page = page,
                 PageSize = pageSize,
                 SearchValue = searchValue,
-                CategoryID = 0,
-                SupplierID = 0
+                CategoryID = categoryID,
+                SupplierID = supplierID
             };
             var result = await CatalogDataService.ListProductsAsync(input);
             return View(result);

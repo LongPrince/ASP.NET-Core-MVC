@@ -15,6 +15,20 @@
             <div class="card-body">
                 <!-- Search -->
                 <form id="formSearchProduct" action="~/Order/SearchProduct" method="get" class="mb-3">
+                    <div class="mb-2">
+                        <select class="form-select mb-2" name="categoryID" onchange="searchProduct(1)">
+                            @foreach (var item in await SelectListHelper.Categories())
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                        <select class="form-select mb-2" name="supplierID" onchange="searchProduct(1)">
+                            @foreach (var item in await SelectListHelper.Suppliers())
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
                     <div class="input-group">
                         <input class="form-control" name="searchValue" id="inputSearchProduct"
                                placeholder="Nhập tên mặt hàng cần tìm" autofocus />
@@ -93,7 +107,14 @@
 
         function searchProduct(page) {
             var searchValue = $("#inputSearchProduct").val();
-            $.get("/Order/SearchProduct", { searchValue: searchValue, page: page }, function (html) {
+            var categoryID = $("#formSearchProduct select[name='categoryID']").val();
+            var supplierID = $("#formSearchProduct select[name='supplierID']").val();
+            $.get("/Order/SearchProduct", { 
+                searchValue: searchValue, 
+                categoryID: categoryID, 
+                supplierID: supplierID, 
+                page: page 
+            }, function (html) {
                 $("#searchProductResult").html(html);
             });
         }

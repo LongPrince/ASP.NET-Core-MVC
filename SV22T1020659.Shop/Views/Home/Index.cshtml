@@ -68,7 +68,7 @@
                                 <p class="card-text text-muted">@(product.ProductDescription?.Length > 50 ? product.ProductDescription.Substring(0, 50) + "..." : product.ProductDescription)</p>
                                 <div class="mt-auto">
                                     <p class="text-primary fw-bold">@product.Price.ToString("N0") VND</p>
-                                    <a href="@Url.Action("Details", "Product", new { id = product.ProductID })" class="btn btn-outline-primary">Xem chi tiết</a>
+                                    <a href="@Url.Action("Detail", "Product", new { id = product.ProductID })" class="btn btn-outline-primary">Xem chi tiết</a>
                                 </div>
                             </div>
                         </div>
